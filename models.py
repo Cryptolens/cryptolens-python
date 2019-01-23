@@ -5,6 +5,7 @@ Created on Wed Jan 23 09:47:26 2019
 @author: Artem Los
 """
 import xml.etree.ElementTree
+import json
 
 class Response:
     
@@ -14,6 +15,9 @@ class Response:
         self.result = result
         self.message = message
         
+    def from_string(responseString):        
+        obj = json.loads(responseString)        
+        return Response(obj["licenseKey"], obj["signature"], obj["result"],obj["message"])
         
 class RSAPublicKey:
     
@@ -22,6 +26,11 @@ class RSAPublicKey:
         self.exponent = exponent
         
     def from_string(rsaPubKeyString):
+        """
+        The rsaPubKeyString can be found at https://app.cryptolens.io/User/Security.
+        It should be of the following format:
+            <RSAKeyValue><Modulus>...</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>
+        """
         rsaKey = xml.etree.ElementTree.fromstring(rsaPubKeyString)
         return RSAPublicKey(rsaKey.find('Modulus').text, rsaKey.find('Exponent').text)
         
