@@ -4,6 +4,7 @@ Created on Wed Jan 23 09:47:26 2019
 
 @author: Artem Los
 """
+import xml.etree.ElementTree
 
 class Response:
     
@@ -21,7 +22,6 @@ class RSAPublicKey:
         self.exponent = exponent
         
     def from_string(rsaPubKeyString):
-        #TODO
-        pass
-        
+        rsaKey = xml.etree.ElementTree.fromstring(rsaPubKeyString)
+        return RSAPublicKey(rsaKey.find('Modulus').text, rsaKey.find('Exponent').text)
         

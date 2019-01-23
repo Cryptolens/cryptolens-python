@@ -21,7 +21,6 @@ class Helpers:
         verifier = PKCS1_v1_5.new(cryptoPubKey)
         return verifier.verify(h, base64.b64decode(response.signature.encode("utf-8")))
     
-    
     def int2base64(num):
         return base64.b64encode(int.to_bytes(num), byteorder='big')
     
