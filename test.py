@@ -5,11 +5,6 @@ Created on Wed Jan 23 09:34:40 2019
 @author: Artem Los
 """
 
-from Crypto.Signature import PKCS1_v1_5
-from Crypto.Hash import SHA256
-from Crypto.PublicKey import RSA
-import base64
-
 from helpers import Helpers
 
 from models import Response, RSAPublicKey
@@ -21,12 +16,4 @@ response = Response("eyJQcm9kdWN0SWQiOjMzNDksIklEIjoxNjksIktleSI6IklDVkxELVZWU1p
 pubKey = RSAPublicKey("sGbvxwdlDbqFXOMlVUnAF5ew0t0WpPW7rFpI5jHQOFkht/326dvh7t74RYeMpjy357NljouhpTLA3a6idnn4j6c3jmPWBkjZndGsPL4Bqm+fwE48nKpGPjkj4q/yzT4tHXBTyvaBjA8bVoCTnu+LiC4XEaLZRThGzIn5KQXKCigg6tQRy0GXE13XYFVz/x1mjFbT9/7dS8p85n8BuwlY5JvuBIQkKhuCNFfrUxBWyu87CFnXWjIupCD2VO/GbxaCvzrRjLZjAngLCMtZbYBALksqGPgTUN7ZM24XbPWyLtKPaXF2i4XRR9u6eTj5BfnLbKAU5PIVfjIS+vNYYogteQ==",\
                       "AQAB")
 
-cryptoPubKey = RSA.construct((Helpers.base642int(pubKey.modulus), Helpers.base642int(pubKey.exponent)))
-
-h = SHA256.new(base64.b64decode(response.license_key.encode("UTF8")))
-
-verifier = PKCS1_v1_5.new(cryptoPubKey)
-
-print(verifier.verify(h, base64.b64decode(response.signature.encode("UTF8"))))
-            
-#print(cryptoPubKey.verify(Helpers.base642int(response.license_key), (Helpers.base642int(response.signature), )))
+print(Helpers.verify_signature(response, pubKey))
