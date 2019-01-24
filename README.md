@@ -4,7 +4,9 @@ This library contains helper methods to verify license keys in Python.
 
 ## Installation
 
-> pip install licensing
+```
+pip install licensing
+```
 
 ## Example
 
