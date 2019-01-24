@@ -6,6 +6,7 @@ Created on Thu Jan 24 08:06:39 2019
 """
 
 from helpers import Helpers
+from models import *
 
 class Key:
     
@@ -13,13 +14,20 @@ class Key:
                  metadata = False, floating_time_interval = 0,\
                  max_overdraft = 0):
         
-        return Helpers.send_request("key/activate", {"token":token,\
+        response = Response.from_string(Helpers.send_request("key/activate", {"token":token,\
                                               "ProductId":product_id,\
                                               "key":key,\
                                               "MachineCode":machine_code,\
                                               "FieldsToReturn":fields_to_return,\
                                               "metadata":metadata,\
                                               "FloatingTimeInterval": floating_time_interval,\
-                                              "MaxOverdraft": max_overdraft})
+                                              "MaxOverdraft": max_overdraft,\
+                                              "Sign":"True",\
+                                              "SignMethod":1}))
+        if response.result == "1":
+            return (None, response.message)
+        else:
+            return (LicenseKey.from_response(response), response.message)
+        
         
     
