@@ -8,8 +8,11 @@ import base64
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA256
 from Crypto.PublicKey import RSA
+import urllib.request
 
 class Helpers:
+    
+    server_address = "https://app.cryptolens.io/api/"
     
     def verify_signature(response, rsaPublicKey):       
         """
@@ -26,4 +29,16 @@ class Helpers:
     
     def base642int(string):
         return int.from_bytes(base64.b64decode((string)), byteorder='big')
+    
+    def send_request(method, params):
+        """
+        Send a POST request to method in the Web API with the specified
+        params and return the response string.
+        
+            method: the path of the method, eg. key/activate
+            params: a dictionary of parameters
+        """    
+        return urllib.request.urlopen(Helpers.server_address + method, \
+                                      urllib.parse.urlencode(params)\
+                                      .encode("utf-8")).read().decode("utf-8")
     
