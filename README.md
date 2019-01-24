@@ -17,9 +17,9 @@ The code below will work exactly as the one explained in the [key verification t
 First, we need to add the namespaces:
 
 ```python
-from cryptolens.helpers import Helpers
-from cryptolens.models import Response, RSAPublicKey
-from cryptolens.methods import Key
+from licensing.helpers import Helpers
+from licensing.models import Response, RSAPublicKey
+from licensing.methods import Key
 ```
 
 Now we can perform the actual key verification:
