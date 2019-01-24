@@ -7,13 +7,14 @@ Created on Wed Jan 23 09:47:26 2019
 import xml.etree.ElementTree
 import json
 import base64
+import datetime
 
 class LicenseKey:
     
     def __init__(self, ProductId, ID, Key, Created, Expires, Period, F1, F2,\
                  F3, F4, F5, F6, F7, F8, Notes, Block, GlobalId, Customer, \
                  ActivatedMachines, TrialActivation, MaxNoOfMachines, \
-                 AllowedMachines, DataObjects, SignDate):
+                 AllowedMachines, DataObjects, SignDate, RawResponse):
         
         self.product_id = ProductId
         self.id = ID
@@ -39,6 +40,7 @@ class LicenseKey:
         self.allowed_machines = AllowedMachines
         self.data_objects = DataObjects
         self.sign_date = SignDate
+        self.raw_respone = RawResponse
         
     def from_response(response):
         
@@ -47,13 +49,13 @@ class LicenseKey:
         
         obj = json.loads(base64.b64decode(response.license_key).decode('utf-8'))
         
-        return LicenseKey(obj["ProductId"], obj["ID"], obj["Key"], obj["Created"],\
-                          obj["Expires"], obj["Period"], obj["F1"], obj["F2"], \
+        return LicenseKey(obj["ProductId"], obj["ID"], obj["Key"], datetime.datetime.fromtimestamp(obj["Created"]),\
+                          datetime.datetime.fromtimestamp(obj["Expires"]), obj["Period"], obj["F1"], obj["F2"], \
                           obj["F3"], obj["F4"],obj["F5"],obj["F6"], obj["F7"], \
                           obj["F8"], obj["Notes"], obj["Block"], obj["GlobalId"],\
                           obj["Customer"], obj["ActivatedMachines"], obj["TrialActivation"], \
                           obj["MaxNoOfMachines"], obj["AllowedMachines"], obj["DataObjects"], \
-                          obj["SignDate"])
+                          datetime.datetime.fromtimestamp(obj["SignDate"]), response)
 
 class Response:
     
@@ -70,7 +72,7 @@ class Response:
 class RSAPublicKey:
     
     def __init__(self, modulus, exponent):
-        self.modulus=modulus
+        self.modulus = modulus
         self.exponent = exponent
         
     def from_string(rsaPubKeyString):
