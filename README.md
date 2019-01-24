@@ -2,6 +2,10 @@
 
 This library contains helper methods to verify license keys in Python. 
 
+## Installation
+
+> pip install licensing
+
 ## Example
 
 ### Key verification
@@ -11,9 +15,9 @@ The code below will work exactly as the one explained in the [key verification t
 First, we need to add the namespaces:
 
 ```python
-from helpers import Helpers
-from models import Response, RSAPublicKey
-from methods import Key
+from cryptolens.helpers import Helpers
+from cryptolens.models import Response, RSAPublicKey
+from cryptolens.methods import Key
 ```
 
 Now we can perform the actual key verification:
