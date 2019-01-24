@@ -27,16 +27,21 @@ class Key:
         More docs: https://app.cryptolens.io/docs/api/v3/Activate
         """
         
-        response = Response.from_string(Helpers.send_request("key/activate", {"token":token,\
-                                              "ProductId":product_id,\
-                                              "key":key,\
-                                              "MachineCode":machine_code,\
-                                              "FieldsToReturn":fields_to_return,\
-                                              "metadata":metadata,\
-                                              "FloatingTimeInterval": floating_time_interval,\
-                                              "MaxOverdraft": max_overdraft,\
-                                              "Sign":"True",\
-                                              "SignMethod":1}))
+        response = Response("","","","")
+        
+        try:
+            response = Response.from_string(Helpers.send_request("key/activate", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "key":key,\
+                                                  "MachineCode":machine_code,\
+                                                  "FieldsToReturn":fields_to_return,\
+                                                  "metadata":metadata,\
+                                                  "FloatingTimeInterval": floating_time_interval,\
+                                                  "MaxOverdraft": max_overdraft,\
+                                                  "Sign":"True",\
+                                                  "SignMethod":1}))
+        except Exception:
+            return (None, "Could not contact the server.")
         
         pubkey = RSAPublicKey.from_string(rsa_pub_key)
     
