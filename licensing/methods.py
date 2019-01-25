@@ -5,8 +5,8 @@ Created on Thu Jan 24 08:06:39 2019
 @author: Artem Los
 """
 
-from helpers import Helpers
-from models import *
+from licensing.internal import Helpers
+from licensing.models import *
 
 class Key:
     
