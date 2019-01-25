@@ -5,7 +5,7 @@ setup(
   version = '0.2',      # Start with a small number and increase it with every change you make
   license='MIT',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
   description = 'Client library for Cryptolens licensing Web API.',   # Give a short description about your library
-  author = '',                   # Type in your name
+  author = 'Cryptolens AB',                   # Type in your name
   author_email = 'support@cryptolens.io',      # Type in your E-Mail
   url = 'https://cryptolens.io',   # Provide either the link to your github or to your website
   download_url = 'https://github.com/Cryptolens/cryptolens-python/archive/v_02.tar.gz',    # I explain this later on
