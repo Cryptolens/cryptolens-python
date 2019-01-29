@@ -53,7 +53,6 @@ Assuming the license key verification was successful, we can save the result in 
 
 ```python
 # res is obtained from the code above
-
 if res[0] != None:
     # saving license file to disk
     with open('licensefile.skm', 'w') as f:
