@@ -35,6 +35,10 @@ if res[0] == None:
     print("An error occured: {0}".format(res[1]))
 else:
     print("Success")
+    
+    license_key = res[0]
+    print("Feature 1: " + str(license_key.f1))
+    print("License expires: " + str(license_key.expires))
 ```
 
 * `pubKey` - the RSA public key (can be found [here](https://app.cryptolens.io/docs/api/v3/QuickStart#api-keys), in *API Keys* section).
@@ -42,3 +46,27 @@ else:
 * `product_id` - the id of the product can be found on the product page.
 * `key` - the license key to be verified
 * `machine_code` - the unique id of the device (we are working on adding a method similar to `Helpers.GetMachineCode()`).
+
+### Offline activation (saving/loading licenses)
+
+Assuming the license key verification was successful, we can save the result in a file so that we can use it instead of contacting Cryptolens.
+
+```python
+# res is obtained from the code above
+
+if res[0] != None:
+    # saving license file to disk
+    with open('licensefile.skm', 'w') as f:
+        f.write(res[0].save_as_string())
+```
+
+When loading it back, we can use the code below:
+
+```python
+# read license file from file
+with open('licensefile.skm', 'r') as f:
+    license_key = LicenseKey.load_from_string(pubKey, f.read())
+    
+    print("Feature 1: " + str(license_key.f1))
+    print("License expires: " + str(license_key.expires))
+```

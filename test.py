@@ -19,3 +19,22 @@ if res[0] == None:
     print("An error occured: {0}".format(res[1]))
 else:
     print("Success")
+    
+    license_key = res[0]
+    print("Feature 1: " + str(license_key.f1))
+    print("License expires: " + str(license_key.expires))
+    
+    
+if res[0] != None:
+    # saving license file to disk
+    with open('licensefile.skm', 'w') as f:
+        f.write(res[0].save_as_string())
+        
+
+# read license file from file
+with open('licensefile.skm', 'r') as f:
+    license_key = LicenseKey.load_from_string(pubKey, f.read())
+    
+    print("Feature 1: " + str(license_key.f1))
+    print("License expires: " + str(license_key.expires))
+    
