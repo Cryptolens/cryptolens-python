@@ -55,6 +55,3 @@ class Key:
                     return (None, "The signature check failed.")
             except Exception:
                 return (None, "The signature check failed.")
-        
-        
-    
