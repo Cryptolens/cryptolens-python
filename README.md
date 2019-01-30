@@ -17,9 +17,8 @@ The code below will work exactly as the one explained in the [key verification t
 First, we need to add the namespaces:
 
 ```python
-from licensing.helpers import Helpers
-from licensing.models import Response, RSAPublicKey
-from licensing.methods import Key
+from licensing.models import *
+from licensing.methods import Key, Helpers
 ```
 
 Now we can perform the actual key verification:
@@ -29,10 +28,10 @@ pubKey = "<RSAKeyValue><Modulus>sGbvxwdlDbqFXOMlVUnAF5ew0t0WpPW7rFpI5jHQOFkht/32
 
 res = Key.activate(token="WyIyNTU1IiwiRjdZZTB4RmtuTVcrQlNqcSszbmFMMHB3aWFJTlBsWW1Mbm9raVFyRyJd",\
                    rsa_pub_key=pubKey,\
-                   product_id=3349, key="ICVLD-VVSZR-ZTICT-YKGXL", machine_code="test")
+                   product_id=3349, key="ICVLD-VVSZR-ZTICT-YKGXL", machine_code=Helpers.GetMachineCode())
 
-if res[0] == None:
-    print("An error occured: {0}".format(res[1]))
+if res[0] == None not Helpers.IsOnRightMachine(res[0]):
+    print("An error occurred: {0}".format(res[1]))
 else:
     print("Success")
     
@@ -45,7 +44,7 @@ else:
 * `token` - the access token (can be found [here](https://app.cryptolens.io/docs/api/v3/QuickStart#api-keys), in *API Keys* section).
 * `product_id` - the id of the product can be found on the product page.
 * `key` - the license key to be verified
-* `machine_code` - the unique id of the device (we are working on adding a method similar to `Helpers.GetMachineCode()`).
+* `machine_code` - the unique id of the device.
 
 ### Offline activation (saving/loading licenses)
 
@@ -66,6 +65,9 @@ When loading it back, we can use the code below:
 with open('licensefile.skm', 'r') as f:
     license_key = LicenseKey.load_from_string(pubKey, f.read())
     
-    print("Feature 1: " + str(license_key.f1))
-    print("License expires: " + str(license_key.expires))
+    if not Helpers.IsOnRightMachine(license_key):
+        print("NOTE: This license file does not belong to this machine.")
+    else:
+        print("Feature 1: " + str(license_key.f1))
+        print("License expires: " + str(license_key.expires))
 ```
