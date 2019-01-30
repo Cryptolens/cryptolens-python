@@ -9,17 +9,25 @@ from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA256
 from Crypto.PublicKey import RSA
 import urllib.request
+import hashlib
 
-class Helpers:
+class HelperMethods:
     
     server_address = "https://app.cryptolens.io/api/"
+    
+    def get_SHA256(string):
+        """
+        Compute the SHA256 signature of a string.
+        """
+        return hashlib.sha256(string.encode("utf-8")).hexdigest()
+    
     
     def verify_signature(response, rsaPublicKey):       
         """
         Verifies a signature from .NET RSACryptoServiceProvider.
         """
-        cryptoPubKey = RSA.construct((Helpers.base642int(rsaPublicKey.modulus),\
-                                      Helpers.base642int(rsaPublicKey.exponent)))
+        cryptoPubKey = RSA.construct((HelperMethods.base642int(rsaPublicKey.modulus),\
+                                      HelperMethods.base642int(rsaPublicKey.exponent)))
         h = SHA256.new(base64.b64decode(response.license_key.encode("utf-8")))
         verifier = PKCS1_v1_5.new(cryptoPubKey)
         return verifier.verify(h, base64.b64decode(response.signature.encode("utf-8")))
@@ -38,7 +46,7 @@ class Helpers:
             method: the path of the method, eg. key/activate
             params: a dictionary of parameters
         """    
-        return urllib.request.urlopen(Helpers.server_address + method, \
+        return urllib.request.urlopen(HelperMethods.server_address + method, \
                                       urllib.parse.urlencode(params)\
                                       .encode("utf-8")).read().decode("utf-8")
     
