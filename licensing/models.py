@@ -12,6 +12,14 @@ import copy
 
 from licensing.internal import HelperMethods
 
+class ActivatedMachine:
+    def __init__(self, IP, Mid, Time):
+        self.IP = IP
+        self.Mid = Mid
+        
+        # TODO: check if time is int, and convert to datetime in this case.
+        self.Time = Time
+
 class LicenseKey:
     
     def __init__(self, ProductId, ID, Key, Created, Expires, Period, F1, F2,\
@@ -52,11 +60,13 @@ class LicenseKey:
         
         obj = json.loads(base64.b64decode(response.license_key).decode('utf-8'))
         
+        
+        
         return LicenseKey(obj["ProductId"], obj["ID"], obj["Key"], datetime.datetime.fromtimestamp(obj["Created"]),\
                           datetime.datetime.fromtimestamp(obj["Expires"]), obj["Period"], obj["F1"], obj["F2"], \
                           obj["F3"], obj["F4"],obj["F5"],obj["F6"], obj["F7"], \
                           obj["F8"], obj["Notes"], obj["Block"], obj["GlobalId"],\
-                          obj["Customer"], obj["ActivatedMachines"], obj["TrialActivation"], \
+                          obj["Customer"], LicenseKey.__load_activated_machines(obj["ActivatedMachines"]), obj["TrialActivation"], \
                           obj["MaxNoOfMachines"], obj["AllowedMachines"], obj["DataObjects"], \
                           datetime.datetime.fromtimestamp(obj["SignDate"]), response)
         
@@ -95,8 +105,18 @@ class LicenseKey:
                     return None
             except Exception:
                 return None
+            
+    def __load_activated_machines(obj):
         
+        if obj == None:
+            return None
         
+        arr = []
+        
+        for item in obj:
+            arr.append(ActivatedMachine(**item))
+        
+        return arr
 
 class Response:
     

@@ -16,7 +16,6 @@ class Key:
     License key related methods. More docs: https://app.cryptolens.io/docs/api/v3/Key.
     """
     
-    
     def activate(token, rsa_pub_key, product_id, key, machine_code, fields_to_return = 0,\
                  metadata = False, floating_time_interval = 0,\
                  max_overdraft = 0):
@@ -63,6 +62,10 @@ class Helpers:
     
     def GetMachineCode():
         
+        """
+        Get a unique identifier for this device.
+        """
+        
         res = []
         res.append(platform.machine())
         res.append(platform.machine())
@@ -74,4 +77,22 @@ class Helpers:
         res.append(str(sys.maxsize > 2**32))
         
         return HelperMethods.get_SHA256(":".join(res))
+    
+    def IsOnRightMachine(license_key):
+        
+        """
+        Check if the device is registered with the license key.
+        """
+        
+        current_mid = Helpers.GetMachineCode()
+        
+        if license_key.activated_machines == None:
+            return False
+        
+        for act_machine in license_key.activated_machines:
+            
+            if current_mid == act_machine.Mid:
+                return True
+            
+        return False
         
