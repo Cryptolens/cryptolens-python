@@ -28,7 +28,8 @@ pubKey = "<RSAKeyValue><Modulus>sGbvxwdlDbqFXOMlVUnAF5ew0t0WpPW7rFpI5jHQOFkht/32
 
 res = Key.activate(token="WyIyNTU1IiwiRjdZZTB4RmtuTVcrQlNqcSszbmFMMHB3aWFJTlBsWW1Mbm9raVFyRyJd",\
                    rsa_pub_key=pubKey,\
-                   product_id=3349, key="ICVLD-VVSZR-ZTICT-YKGXL", machine_code=Helpers.GetMachineCode())
+                   product_id=3349, key="ICVLD-VVSZR-ZTICT-YKGXL", \
+                   machine_code=Helpers.GetMachineCode())
 
 if res[0] == None not Helpers.IsOnRightMachine(res[0]):
     print("An error occurred: {0}".format(res[1]))
