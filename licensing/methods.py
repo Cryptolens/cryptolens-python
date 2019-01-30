@@ -5,7 +5,9 @@ Created on Thu Jan 24 08:06:39 2019
 @author: Artem Los
 """
 
-from licensing.internal import Helpers
+import platform
+import sys
+from licensing.internal import HelperMethods
 from licensing.models import *
 
 class Key:
@@ -30,7 +32,7 @@ class Key:
         response = Response("","","","")
         
         try:
-            response = Response.from_string(Helpers.send_request("key/activate", {"token":token,\
+            response = Response.from_string(HelperMethods.send_request("key/activate", {"token":token,\
                                                   "ProductId":product_id,\
                                                   "key":key,\
                                                   "MachineCode":machine_code,\
@@ -49,9 +51,27 @@ class Key:
             return (None, response.message)
         else:
             try:
-                if Helpers.verify_signature(response, pubkey):
+                if HelperMethods.verify_signature(response, pubkey):
                     return (LicenseKey.from_response(response), response.message)
                 else:
                     return (None, "The signature check failed.")
             except Exception:
                 return (None, "The signature check failed.")
+            
+            
+class Helpers:
+    
+    def GetMachineCode():
+        
+        res = []
+        res.append(platform.machine())
+        res.append(platform.machine())
+        res.append(platform.processor())
+        res.append(platform.system())
+        res.append(platform.architecture()[1])
+        # safer than using architecture()[0]
+        # see https://docs.python.org/3/library/platform.html#platform.architecture
+        res.append(str(sys.maxsize > 2**32))
+        
+        return HelperMethods.get_SHA256(":".join(res))
+        

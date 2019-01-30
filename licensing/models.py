@@ -10,7 +10,7 @@ import base64
 import datetime
 import copy
 
-from licensing.internal import Helpers
+from licensing.internal import HelperMethods
 
 class LicenseKey:
     
@@ -89,7 +89,7 @@ class LicenseKey:
         else:
             try:
                 pubKey = RSAPublicKey.from_string(rsa_pub_key)
-                if Helpers.verify_signature(response, pubKey):
+                if HelperMethods.verify_signature(response, pubKey):
                     return LicenseKey.from_response(response)
                 else:
                     return None
