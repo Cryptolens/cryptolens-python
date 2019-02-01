@@ -41,4 +41,3 @@ with open('licensefile.skm', 'r') as f:
         print("License expires: " + str(license_key.expires))
     
 print(Helpers.GetMachineCode())
-
