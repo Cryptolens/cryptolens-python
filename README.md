@@ -91,4 +91,3 @@ with open('licensefile.skm', 'r') as f:
 [Floating licenses](https://help.cryptolens.io/licensing-models/floating) can be enabled by setting the floatingTimeInterval. Optionally, you can also allow customers to exceed the bound by specifying the maxOverdraft.
 
 The code below has a floatingTimeInterval of 300 seconds and maxOverdraft set to 1. To support floating licenses with overdraft, the call to `Helpers.IsOnRightMachine(license, true, true)` needs two boolean flags to be set to true.
-
