@@ -78,7 +78,7 @@ class Helpers:
         
         return HelperMethods.get_SHA256(":".join(res))
     
-    def IsOnRightMachine(license_key):
+    def IsOnRightMachine(license_key, is_floating_license = False, allow_overdraft=False):
         
         """
         Check if the device is registered with the license key.
@@ -89,10 +89,15 @@ class Helpers:
         if license_key.activated_machines == None:
             return False
         
-        for act_machine in license_key.activated_machines:
-            
-            if current_mid == act_machine.Mid:
+        if is_floating_license:
+            if len(license_key.activated_machines) == 1 and \
+            (license_key.activated_machines[0].Mid[9:] == current_mid or \
+             allow_overdraft and license_key.activated_machines[0].Mid[19:] == current_mid):
                 return True
+        else:
+            for act_machine in license_key.activated_machines:
+                if current_mid == act_machine.Mid:
+                    return True
             
         return False
         
