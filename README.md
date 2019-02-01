@@ -1,6 +1,8 @@
 # Cryptolens Client API for Python
 
-This library contains helper methods to verify license keys in Python. 
+This library contains helper methods to verify license keys in Python.
+
+Python docs can be found here: https://help.cryptolens.io/api/python/
 
 ## Installation
 
