@@ -31,7 +31,7 @@ res = Key.activate(token="WyIyNTU1IiwiRjdZZTB4RmtuTVcrQlNqcSszbmFMMHB3aWFJTlBsWW
                    product_id=3349, key="ICVLD-VVSZR-ZTICT-YKGXL", \
                    machine_code=Helpers.GetMachineCode())
 
-if res[0] == None not Helpers.IsOnRightMachine(res[0]):
+if res[0] == None or not Helpers.IsOnRightMachine(res[0]):
     print("An error occurred: {0}".format(res[1]))
 else:
     print("Success")
@@ -64,11 +64,31 @@ When loading it back, we can use the code below:
 ```python
 # read license file from file
 with open('licensefile.skm', 'r') as f:
-    license_key = LicenseKey.load_from_string(pubKey, f.read())
+    license_key = LicenseKey.load_from_string(pubKey, f.read(), 30)
     
-    if not Helpers.IsOnRightMachine(license_key):
+    if license_key != None not Helpers.IsOnRightMachine(license_key):
         print("NOTE: This license file does not belong to this machine.")
     else:
         print("Feature 1: " + str(license_key.f1))
         print("License expires: " + str(license_key.expires))
 ```
+
+If you want to make sure that the license file is not too old, you can specify the maximum number of days as shown below (after 30 days, this method will return NoneType).
+
+```python
+# read license file from file
+with open('licensefile.skm', 'r') as f:
+    license_key = LicenseKey.load_from_string(pubKey, f.read(), 30)
+    
+    if license_key != None not Helpers.IsOnRightMachine(license_key):
+        print("NOTE: This license file does not belong to this machine.")
+    else:
+        print("Feature 1: " + str(license_key.f1))
+        print("License expires: " + str(license_key.expires))
+```
+
+### Floating licenses
+[Floating licenses](https://help.cryptolens.io/licensing-models/floating) can be enabled by setting the floatingTimeInterval. Optionally, you can also allow customers to exceed the bound by specifying the maxOverdraft.
+
+The code below has a floatingTimeInterval of 300 seconds and maxOverdraft set to 1. To support floating licenses with overdraft, the call to `Helpers.IsOnRightMachine(license, true, true)` needs two boolean flags to be set to true.
+
