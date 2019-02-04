@@ -6,6 +6,7 @@ Created on Thu Jan 24 08:06:39 2019
 """
 
 import platform
+import uuid
 import sys
 from licensing.internal import HelperMethods
 from licensing.models import *
@@ -72,6 +73,7 @@ class Helpers:
         res.append(platform.processor())
         res.append(platform.system())
         res.append(platform.architecture()[1])
+        res.append(str(uuid.getnode()))
         # safer than using architecture()[0]
         # see https://docs.python.org/3/library/platform.html#platform.architecture
         res.append(str(sys.maxsize > 2**32))
