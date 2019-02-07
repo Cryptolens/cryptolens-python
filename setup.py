@@ -11,7 +11,7 @@ setup(
   download_url = 'https://github.com/Cryptolens/cryptolens-python/archive/v_06.tar.gz',    # I explain this later on
   keywords = ['software licensing', 'licensing library', 'cryptolens'],   # Keywords that define your package best
   install_requires=[            # I get to this in a second
-          'pycrypto'
+          'pycryptodome'
       ],
   classifiers=[
     #'Development Status :: 5 - Stable',      # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
