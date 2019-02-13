@@ -10,6 +10,7 @@ from Crypto.Hash import SHA256
 from Crypto.PublicKey import RSA
 import urllib.request
 import hashlib
+from subprocess import Popen, PIPE
 
 class HelperMethods:
     
@@ -49,4 +50,12 @@ class HelperMethods:
         return urllib.request.urlopen(HelperMethods.server_address + method, \
                                       urllib.parse.urlencode(params)\
                                       .encode("utf-8")).read().decode("utf-8")
+        
+        
+    def start_process(command):
+        
+        process = Popen(command, stdout=PIPE)
+        (output, err) = process.communicate()
+        exit_code = process.wait()
+        return output.decode("utf-8")
     

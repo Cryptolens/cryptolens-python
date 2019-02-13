@@ -67,7 +67,9 @@ class Helpers:
         Get a unique identifier for this device.
         """
         
+        """
         res = []
+        
         res.append(platform.machine())
         res.append(platform.machine())
         res.append(platform.processor())
@@ -77,8 +79,14 @@ class Helpers:
         # safer than using architecture()[0]
         # see https://docs.python.org/3/library/platform.html#platform.architecture
         res.append(str(sys.maxsize > 2**32))
+        """
         
-        return HelperMethods.get_SHA256(":".join(res))
+        if "Windows" in platform.platform():
+            return HelperMethods.get_SHA256(HelperMethods.start_process(["cmd.exe", "/C", "wmic","csproduct", "get", "uuid"]))
+        else:
+            return "";
+        
+        #return HelperMethods.get_SHA256(":".join(res))
     
     def IsOnRightMachine(license_key, is_floating_license = False, allow_overdraft=False):
         
