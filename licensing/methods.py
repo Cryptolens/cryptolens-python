@@ -67,26 +67,13 @@ class Helpers:
         Get a unique identifier for this device.
         """
         
-        """
-        res = []
-        
-        res.append(platform.machine())
-        res.append(platform.machine())
-        res.append(platform.processor())
-        res.append(platform.system())
-        res.append(platform.architecture()[1])
-        res.append(str(uuid.getnode()))
-        # safer than using architecture()[0]
-        # see https://docs.python.org/3/library/platform.html#platform.architecture
-        res.append(str(sys.maxsize > 2**32))
-        """
-        
         if "Windows" in platform.platform():
             return HelperMethods.get_SHA256(HelperMethods.start_process(["cmd.exe", "/C", "wmic","csproduct", "get", "uuid"]))
+        elif "Mac" in platform.platform():               
+            res = HelperMethods.start_process(["system_profiler","SPHardwareDataType"]).decode('utf-8')
+            HelperMethods.get_SHA256(res[res.index("UUID"):].strip())
         else:
-            return "";
-        
-        #return HelperMethods.get_SHA256(":".join(res))
+            return HelperMethods.get_SHA256(HelperMethods.start_process(["dmidecode", "-s", "system-uuid"]).decode('utf-8'))
     
     def IsOnRightMachine(license_key, is_floating_license = False, allow_overdraft=False):
         
