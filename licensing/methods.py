@@ -72,6 +72,8 @@ class Helpers:
         elif "Mac" in platform.platform():               
             res = HelperMethods.start_process(["system_profiler","SPHardwareDataType"]).decode('utf-8')
             HelperMethods.get_SHA256(res[res.index("UUID"):].strip())
+        elif "Linux" in platform.platform():
+            return HelperMethods.get_SHA256(HelperMethods.start_process(["dmidecode", "-s", "system-uuid"]))
         else:
             return HelperMethods.get_SHA256(HelperMethods.start_process(["dmidecode", "-s", "system-uuid"]).decode('utf-8'))
     
