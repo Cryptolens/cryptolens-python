@@ -138,7 +138,27 @@ class Response:
         
     def from_string(responseString):        
         obj = json.loads(responseString)
-        return Response(obj["licenseKey"], obj["signature"], obj["result"],obj["message"])
+        
+        licenseKey = ""
+        signature = ""
+        result = ""
+        message = ""
+        
+        if "licenseKey" in obj:
+            licenseKey = obj["licenseKey"]
+            
+        if "signature" in obj:
+            signature = obj["signature"]
+        
+        if "message" in obj:
+            message = obj["message"]
+            
+        if "result" in obj:
+            result = obj["result"]
+        else:
+            result = 1
+        
+        return Response(licenseKey, signature, result, message)
         
 class RSAPublicKey:
     

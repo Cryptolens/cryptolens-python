@@ -47,7 +47,7 @@ class Key:
         
         pubkey = RSAPublicKey.from_string(rsa_pub_key)
     
-        if response.result == "1":
+        if response.result == 1:
             return (None, response.message)
         else:
             try:
