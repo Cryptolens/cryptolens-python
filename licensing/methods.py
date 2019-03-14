@@ -10,6 +10,28 @@ import uuid
 import sys
 from licensing.internal import HelperMethods
 from licensing.models import *
+import json
+
+class AI:
+    
+    def get_events(token, limit=10, starting_after=None):
+        
+        response = HelperMethods.send_request("ai/getevents", \
+                                              {"token":token,\
+                                               "limit":limit, \
+                                               "startingafter":starting_after})
+        
+        jobj = json.loads(response)
+        
+        arr = []
+        
+        for item in jobj["events"]:
+            arr.append(Event(**item))
+        
+        
+        return arr
+        
+
 
 class Key:
     
