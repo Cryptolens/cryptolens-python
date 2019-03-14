@@ -16,12 +16,23 @@ class AI:
     
     def get_events(token, limit=10, starting_after=None):
         
+        """
+        This method will retrieve events that were registered using Register event method.
+        
+        :param limit: Specifies how many events should be returned (default 10, max 100).
+        :param starting_after: 	Works as a cursor (for pagination). If the last element had the id=125, then setting this to 125 will return all events coming after 125.
+        """
+        
+        
         response = HelperMethods.send_request("ai/getevents", \
                                               {"token":token,\
                                                "limit":limit, \
                                                "startingafter":starting_after})
         
         jobj = json.loads(response)
+        
+        if jobj == None or jobj["result"] == "1":
+            return None
         
         arr = []
         
