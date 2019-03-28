@@ -43,4 +43,4 @@ with open('licensefile.skm', 'r') as f:
 print(Helpers.GetMachineCode())
 
 
-a = AI.get_events("WyIyOTk0Iiwid1ZZUUU4bVEyd2Z1VCtGL05aREpQb0p4VEkxYThRbEw1aGRpUHg3ZiJd")
+#a = AI.get_events("WyIyOTk0Iiwid1ZZUUU4bVEyd2Z1VCtGL05aREpQb0p4VEkxYThRbEw1aGRpUHg3ZiJd")

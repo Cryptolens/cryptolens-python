@@ -41,8 +41,26 @@ class AI:
         
         
         return arr
+    
+    
+"""
+class Product:
+    
+    def get_keys(token, product_id, page = 1, order_by = "ID ascending", search_query = ""):
         
-
+        response = HelperMethods.send_request("product/getkeys", \
+                                              {"token":token,\
+                                               "productId": product_id, \
+                                               "orderby":order_by, \
+                                               "searchquery": search_query})
+    
+        jobj = json.loads(response)
+        
+        if jobj == None or jobj["result"] == "1":
+            return None
+        
+"""        
+    
 
 class Key:
     
