@@ -127,6 +127,18 @@ class LicenseKey:
             arr.append(ActivatedMachine(**item))
         
         return arr
+    
+class Event:
+    
+    def __init__(self, currency, eventName, featureName, id, key, machineCode, productId, time, value):
+        self.currency = currency
+        self.event_name = eventName
+        self.feature_name = featureName
+        self.id = id
+        self.machine_code = machineCode
+        self.product_id = productId
+        self.time = time
+        self.value = value
 
 class Response:
     

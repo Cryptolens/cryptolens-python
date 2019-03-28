@@ -10,6 +10,57 @@ import uuid
 import sys
 from licensing.internal import HelperMethods
 from licensing.models import *
+import json
+
+class AI:
+    
+    def get_events(token, limit=10, starting_after=None):
+        
+        """
+        This method will retrieve events that were registered using Register event method.
+        
+        :param limit: Specifies how many events should be returned (default 10, max 100).
+        :param starting_after: 	Works as a cursor (for pagination). If the last element had the id=125, then setting this to 125 will return all events coming after 125.
+        """
+        
+        
+        response = HelperMethods.send_request("ai/getevents", \
+                                              {"token":token,\
+                                               "limit":limit, \
+                                               "startingafter":starting_after})
+        
+        jobj = json.loads(response)
+        
+        if jobj == None or jobj["result"] == "1":
+            return None
+        
+        arr = []
+        
+        for item in jobj["events"]:
+            arr.append(Event(**item))
+        
+        
+        return arr
+    
+    
+"""
+class Product:
+    
+    def get_keys(token, product_id, page = 1, order_by = "ID ascending", search_query = ""):
+        
+        response = HelperMethods.send_request("product/getkeys", \
+                                              {"token":token,\
+                                               "productId": product_id, \
+                                               "orderby":order_by, \
+                                               "searchquery": search_query})
+    
+        jobj = json.loads(response)
+        
+        if jobj == None or jobj["result"] == "1":
+            return None
+        
+"""        
+    
 
 class Key:
     
