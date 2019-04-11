@@ -59,7 +59,7 @@ class Key:
             except Exception:
                 return (None, "The signature check failed.")
             
-    def create_trial_key(token):
+    def create_trial_key(token, product_id, machine_code):
         """
         Calls the CreateTrialKey method in Web API 3 and returns a tuple containing
         (LicenseKeyString, Message). If an error occurs, LicenseKeyString will be None. If
