@@ -10,6 +10,7 @@ import uuid
 import sys
 from licensing.internal import HelperMethods
 from licensing.models import *
+import json
 
 class Key:
     
@@ -57,6 +58,35 @@ class Key:
                     return (None, "The signature check failed.")
             except Exception:
                 return (None, "The signature check failed.")
+            
+    def create_trial_key(token):
+        """
+        Calls the CreateTrialKey method in Web API 3 and returns a tuple containing
+        (LicenseKeyString, Message). If an error occurs, LicenseKeyString will be None. If
+        everything went well, no message will be returned.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/CreateTrialKey
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("key/createtrialkey", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "MachineCode":machine_code})
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or jobj["result"] == "1":
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+           
+        return (jobj["key"], "")
+
             
             
 class Helpers:
