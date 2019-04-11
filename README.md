@@ -108,7 +108,48 @@ res = Key.activate(token="WyIyNjA1IiwiTjhZQUpIYXJPaVdBV0ozQUlKVC9tamdDbFZDRzhZRH
                    max_overdraft=1)
 
 if res[0] == None or not Helpers.IsOnRightMachine(res[0], is_floating_license=True, allow_overdraft=True):
-    print("An error occured: {0}".format(res[1]))
+    print("An error occurred: {0}".format(res[1]))
+else:
+    print("Success")
+    
+    license_key = res[0]
+    print("Feature 1: " + str(license_key.f1))
+    print("License expires: " + str(license_key.expires))
+```
+
+### Create Trial Key (verified trial)
+
+#### Idea
+
+A [trial key](https://help.cryptolens.io/examples/verified-trials) allows your users to evaluate some or all parts of your software for a limited period of time. The goal of trial keys is to set it up in such a way that you don’t need to manually create them, while still keeping everything secure.
+
+In Cryptolens, all trial keys are bound to the device that requested them, which helps to prevent users from using the trial after reinstalling their device.
+
+You can define which features should count as trial by [editing feature definitions](https://help.cryptolens.io/web-interface/feature-definitions) on the product page.
+
+#### Implementation
+
+The code below shows how to create trial key. If the trial key is successful, `trial_key[0]` will contain the license key string. We then need to call `Key.Activate` (as shown in the earlier examples) with the obtained license key to verify the license.
+
+```python
+from licensing.models import *
+from licensing.methods import Key, Helpers
+
+trial_key = res = Key.create_trial_key("WyIzODQ0IiwiempTRWs4SnBKTTArYUh3WkwyZ0VwQkVyeTlUVkRWK2ZTOS8wcTBmaCJd", 3941, Helpers.GetMachineCode())
+
+if trial_key[0] == None:
+    print("An error occurred: {0}".format(res[1]))
+
+
+pubKey = "<RSAKeyValue><Modulus>sGbvxwdlDbqFXOMlVUnAF5ew0t0WpPW7rFpI5jHQOFkht/326dvh7t74RYeMpjy357NljouhpTLA3a6idnn4j6c3jmPWBkjZndGsPL4Bqm+fwE48nKpGPjkj4q/yzT4tHXBTyvaBjA8bVoCTnu+LiC4XEaLZRThGzIn5KQXKCigg6tQRy0GXE13XYFVz/x1mjFbT9/7dS8p85n8BuwlY5JvuBIQkKhuCNFfrUxBWyu87CFnXWjIupCD2VO/GbxaCvzrRjLZjAngLCMtZbYBALksqGPgTUN7ZM24XbPWyLtKPaXF2i4XRR9u6eTj5BfnLbKAU5PIVfjIS+vNYYogteQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>"
+
+res = Key.activate(token="WyIyNTU1IiwiRjdZZTB4RmtuTVcrQlNqcSszbmFMMHB3aWFJTlBsWW1Mbm9raVFyRyJd",\
+                   rsa_pub_key=pubKey,\
+                   product_id=3941, key=trial_key[0], \
+                   machine_code=Helpers.GetMachineCode())
+
+if res[0] == None or not Helpers.IsOnRightMachine(res[0]):
+    print("An error occurred: {0}".format(res[1]))
 else:
     print("Success")
     
