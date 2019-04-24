@@ -135,7 +135,7 @@ The code below shows how to create trial key. If the trial key is successful, `t
 from licensing.models import *
 from licensing.methods import Key, Helpers
 
-trial_key = res = Key.create_trial_key("WyIzODQ0IiwiempTRWs4SnBKTTArYUh3WkwyZ0VwQkVyeTlUVkRWK2ZTOS8wcTBmaCJd", 3941, Helpers.GetMachineCode())
+trial_key = Key.create_trial_key("WyIzODQ0IiwiempTRWs4SnBKTTArYUh3WkwyZ0VwQkVyeTlUVkRWK2ZTOS8wcTBmaCJd", 3941, Helpers.GetMachineCode())
 
 if trial_key[0] == None:
     print("An error occurred: {0}".format(res[1]))
