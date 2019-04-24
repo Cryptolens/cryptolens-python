@@ -86,6 +86,37 @@ class Key:
                return (None, "Could not contact the server.")
            
         return (jobj["key"], "")
+    
+    
+    def deactivate(token, product_id, key, machine_code, floating = False):
+        """
+        Calls the Deactivate method in Web API 3 and returns a tuple containing
+        (Success, Message). If an error occurs, Success will be False. If
+        everything went well, Sucess is true and no message will be returned.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/Deactivate
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("key/deactivate", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Key" : key,\
+                                                  "Floating" : floating,\
+                                                  "MachineCode":machine_code})
+        except Exception:
+            return (False, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or jobj["result"] == "1":
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (True, "")
 
             
             
