@@ -66,7 +66,7 @@ When loading it back, we can use the code below:
 ```python
 # read license file from file
 with open('licensefile.skm', 'r') as f:
-    license_key = LicenseKey.load_from_string(pubKey, f.read(), 30)
+    license_key = LicenseKey.load_from_string(pubKey, f.read())
     
     if license_key != None not Helpers.IsOnRightMachine(license_key):
         print("NOTE: This license file does not belong to this machine.")
