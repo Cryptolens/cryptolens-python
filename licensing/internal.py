@@ -87,5 +87,5 @@ class HelperMethods:
 
     @staticmethod
     def compute_machine_code():
-        return get_dbus_machine_id() + get_inodes()
+        return HelperMethods.get_dbus_machine_id() + HelperMethods.get_inodes()
     
