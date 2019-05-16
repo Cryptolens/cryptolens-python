@@ -134,9 +134,9 @@ class Helpers:
             res = HelperMethods.start_process(["system_profiler","SPHardwareDataType"]).decode('utf-8')
             HelperMethods.get_SHA256(res[res.index("UUID"):].strip())
         elif "Linux" in platform.platform():
-            return HelperMethods.get_SHA256(HelperMethods.start_process(["dmidecode", "-s", "system-uuid"]))
+            return HelperMethods.get_SHA256(HelperMethods.compute_machine_code())
         else:
-            return HelperMethods.get_SHA256(HelperMethods.start_process(["dmidecode", "-s", "system-uuid"]).decode('utf-8'))
+            return HelperMethods.get_SHA256(HelperMethods.compute_machine_code())
     
     def IsOnRightMachine(license_key, is_floating_license = False, allow_overdraft=False):
         
