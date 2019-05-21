@@ -18,6 +18,7 @@ class Key:
     License key related methods. More docs: https://app.cryptolens.io/docs/api/v3/Key.
     """
     
+    @staticmethod
     def activate(token, rsa_pub_key, product_id, key, machine_code, fields_to_return = 0,\
                  metadata = False, floating_time_interval = 0,\
                  max_overdraft = 0):
@@ -58,7 +59,8 @@ class Key:
                     return (None, "The signature check failed.")
             except Exception:
                 return (None, "The signature check failed.")
-            
+         
+    @staticmethod
     def create_trial_key(token, product_id, machine_code):
         """
         Calls the CreateTrialKey method in Web API 3 and returns a tuple containing
@@ -87,7 +89,7 @@ class Key:
            
         return (jobj["key"], "")
     
-    
+    @staticmethod
     def deactivate(token, product_id, key, machine_code, floating = False):
         """
         Calls the Deactivate method in Web API 3 and returns a tuple containing
@@ -122,6 +124,7 @@ class Key:
             
 class Helpers:
     
+    @staticmethod
     def GetMachineCode():
         
         """
@@ -138,6 +141,7 @@ class Helpers:
         else:
             return HelperMethods.get_SHA256(HelperMethods.compute_machine_code())
     
+    @staticmethod
     def IsOnRightMachine(license_key, is_floating_license = False, allow_overdraft=False):
         
         """

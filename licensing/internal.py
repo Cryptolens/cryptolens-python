@@ -16,13 +16,14 @@ class HelperMethods:
     
     server_address = "https://app.cryptolens.io/api/"
     
+    @staticmethod
     def get_SHA256(string):
         """
         Compute the SHA256 signature of a string.
         """
         return hashlib.sha256(string.encode("utf-8")).hexdigest()
     
-    
+    @staticmethod
     def verify_signature(response, rsaPublicKey):       
         """
         Verifies a signature from .NET RSACryptoServiceProvider.
@@ -33,12 +34,15 @@ class HelperMethods:
         verifier = PKCS1_v1_5.new(cryptoPubKey)
         return verifier.verify(h, base64.b64decode(response.signature.encode("utf-8")))
     
+    @staticmethod
     def int2base64(num):
         return base64.b64encode(int.to_bytes(num), byteorder='big')
     
+    @staticmethod
     def base642int(string):
         return int.from_bytes(base64.b64decode((string)), byteorder='big')
     
+    @staticmethod
     def send_request(method, params):
         """
         Send a POST request to method in the Web API with the specified
@@ -51,7 +55,7 @@ class HelperMethods:
                                       urllib.parse.urlencode(params)\
                                       .encode("utf-8")).read().decode("utf-8")
         
-        
+    @staticmethod 
     def start_process(command):
         
         process = Popen(command, stdout=PIPE)
