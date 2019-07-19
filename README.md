@@ -6,8 +6,17 @@ Python docs can be found here: https://help.cryptolens.io/api/python/
 
 ## Installation
 
+### Python 3
 ```
 pip install licensing
+```
+
+### Python 2
+Please copy `cryptolens_python2.py` file into your project folder. The entire library is contained in that file.
+> In the examples below, please disregard the imports and use only the following one:
+
+```python
+from cryptolens_python2 import *
 ```
 
 ## Example
@@ -18,9 +27,16 @@ The code below will work exactly as the one explained in the [key verification t
 
 First, we need to add the namespaces:
 
+In Python 3:
 ```python
 from licensing.models import *
 from licensing.methods import Key, Helpers
+```
+
+In Python 2:
+
+```python
+from cryptolens_python2 import *
 ```
 
 Now we can perform the actual key verification:
