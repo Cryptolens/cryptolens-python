@@ -4,6 +4,8 @@ This library contains helper methods to verify license keys in Python.
 
 Python docs can be found here: https://help.cryptolens.io/api/python/
 
+**Autodesk Maya**: The Python2 version needs to be used, as described [here](https://cryptolens.io/2019/07/autodesk-maya-plugin-software-licensing/).
+
 ## Installation
 
 ### Python 3
