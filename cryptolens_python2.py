@@ -288,9 +288,9 @@ class Helpers:
         Get a unique identifier for this device.
         """
         
-        if "Windows" in platform.platform():
+        if "Windows" in platform.platform().lower():
             return HelperMethods.get_SHA256(HelperMethods.start_process(["cmd.exe", "/C", "wmic","csproduct", "get", "uuid"]))
-        elif "Mac" in platform.platform():               
+        elif "Darwin" in platform.platform().lower():               
             res = HelperMethods.start_process(["system_profiler","SPHardwareDataType"]).decode('utf-8')
             HelperMethods.get_SHA256(res[res.index("UUID"):].strip())
         elif "Linux" in platform.platform(HelperMethods.compute_machine_code()):
