@@ -81,7 +81,7 @@ class Key:
         
         jobj = json.loads(response)
 
-        if jobj == None or jobj["result"] == "1":
+        if jobj == None or str(jobj["result"]) == "1":
             if jobj != None:
                 return (None, jobj["message"])
             else:
