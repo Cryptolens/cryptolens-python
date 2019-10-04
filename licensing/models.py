@@ -145,7 +145,7 @@ class Response:
         
         licenseKey = ""
         signature = ""
-        result = ""
+        result = 0
         message = ""
         
         if "licenseKey" in obj:

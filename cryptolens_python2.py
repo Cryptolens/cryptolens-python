@@ -185,7 +185,7 @@ class Key:
         More docs: https://app.cryptolens.io/docs/api/v3/Activate
         """
         
-        response = Response("","","","")
+        response = Response("","",0,"")
         
         try:
             response = Response.from_string(HelperMethods.send_request("key/activate", {"token":token,\
@@ -235,7 +235,7 @@ class Key:
         
         jobj = json.loads(response)
 
-        if jobj == None or jobj["result"] == "1":
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
             if jobj != None:
                 return (None, jobj["message"])
             else:
@@ -269,7 +269,7 @@ class Key:
         
         jobj = json.loads(response)
 
-        if jobj == None or jobj["result"] == "1":
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
             if jobj != None:
                 return (False, jobj["message"])
             else:
@@ -461,7 +461,7 @@ class Response:
         
         licenseKey = ""
         signature = ""
-        result = ""
+        result = 0
         message = ""
         
         if "licenseKey" in obj:
