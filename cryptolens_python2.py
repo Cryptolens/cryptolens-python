@@ -292,7 +292,7 @@ class Helpers:
             return HelperMethods.get_SHA256(HelperMethods.start_process(["cmd.exe", "/C", "wmic","csproduct", "get", "uuid"]))
         elif "darwin" in platform.platform().lower():               
             res = HelperMethods.start_process(["system_profiler","SPHardwareDataType"]).decode('utf-8')
-            HelperMethods.get_SHA256(res[res.index("UUID"):].strip())
+            return HelperMethods.get_SHA256(res[res.index("UUID"):].strip())
         elif "linux" in platform.platform(HelperMethods.compute_machine_code()):
             return HelperMethods.get_SHA256(HelperMethods.compute_machine_code())
         else:
