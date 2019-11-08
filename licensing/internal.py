@@ -5,9 +5,6 @@ Created on Wed Jan 23 10:12:13 2019
 @author: Artem Los
 """
 import base64
-from Crypto.Signature import PKCS1_v1_5
-from Crypto.Hash import SHA256
-from Crypto.PublicKey import RSA
 import urllib.request
 import hashlib
 from subprocess import Popen, PIPE
@@ -24,15 +21,66 @@ class HelperMethods:
         return hashlib.sha256(string.encode("utf-8")).hexdigest()
     
     @staticmethod
+    def I2OSP(x, xLen):
+        if x > (1 << (8 * xLen)):
+            return None
+        Xrev = []
+        for _ in range(0, xLen):
+            x, m = divmod(x, 256)
+            Xrev.append(m)
+        return bytes(reversed(Xrev))
+    
+    @staticmethod
+    def OS2IP(X):
+        import binascii
+        h = binascii.hexlify(X)
+        return int(h, 16)
+       
+    @staticmethod
+    def RSAVP1(pair, s):
+        n, e = pair
+        if s < 0 or n-1 < s:
+            return None
+        return pow(s, e, n)
+    
+    @staticmethod
+    def EMSA_PKCS1_V15_ENCODE(M, emLen):
+        import hashlib
+        h = hashlib.sha256()
+        h.update(M)
+        H = h.digest()
+    
+        T = bytes([0x30, 0x31, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01, 0x05, 0x00, 0x04, 0x20]) + H
+        tLen = len(T)
+        if emLen < tLen + 11:
+            return None
+        PS = bytes([0xff for _ in range(emLen - tLen - 3)])
+        return b"".join([b"\x00\x01", PS, b"\x00", T])
+
+    @staticmethod
+    def RSAASSA_PKCS1_V15_VERIFY(pair, M, S):
+        n, e = pair
+        s = HelperMethods.OS2IP(S)
+        m = HelperMethods.RSAVP1((n,e), s)
+        if m is None: return False
+        EM = HelperMethods.I2OSP(m, 256)
+        if EM is None: return False
+        EM2 = HelperMethods.EMSA_PKCS1_V15_ENCODE(M, 256)  # Can return None, but it's OK since EM is not None
+        return EM == EM2
+    
+    @staticmethod
     def verify_signature(response, rsaPublicKey):       
         """
         Verifies a signature from .NET RSACryptoServiceProvider.
         """
-        cryptoPubKey = RSA.construct((HelperMethods.base642int(rsaPublicKey.modulus),\
-                                      HelperMethods.base642int(rsaPublicKey.exponent)))
-        h = SHA256.new(base64.b64decode(response.license_key.encode("utf-8")))
-        verifier = PKCS1_v1_5.new(cryptoPubKey)
-        return verifier.verify(h, base64.b64decode(response.signature.encode("utf-8")))
+        
+        n = HelperMethods.OS2IP(base64.b64decode(rsaPublicKey.modulus))
+        e = HelperMethods.OS2IP(base64.b64decode(rsaPublicKey.exponent))
+        
+        m = base64.b64decode(response.license_key)
+        r = base64.b64decode(response.signature)
+        
+        return HelperMethods.RSAASSA_PKCS1_V15_VERIFY((n,e), m, r)
     
     @staticmethod
     def int2base64(num):
