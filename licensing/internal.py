@@ -54,18 +54,18 @@ class HelperMethods:
         tLen = len(T)
         if emLen < tLen + 11:
             return None
-            PS = bytes([0xff for _ in range(emLen - tLen - 3)])
+        PS = bytes([0xff for _ in range(emLen - tLen - 3)])
         return b"".join([b"\x00\x01", PS, b"\x00", T])
 
     @staticmethod
     def RSAASSA_PKCS1_V15_VERIFY(pair, M, S):
         n, e = pair
-        s = OS2IP(S)
-        m = RSAVP1((n,e), s)
+        s = HelperMethods.OS2IP(S)
+        m = HelperMethods.RSAVP1((n,e), s)
         if m is None: return False
-        EM = I2OSP(m, 256)
+        EM = HelperMethods.I2OSP(m, 256)
         if EM is None: return False
-        EM2 = EMSA_PKCS1_V15_ENCODE(M, 256)  # Can return None, but it's OK since EM is not None
+        EM2 = HelperMethods.EMSA_PKCS1_V15_ENCODE(M, 256)  # Can return None, but it's OK since EM is not None
         return EM == EM2
     
     @staticmethod
@@ -74,13 +74,13 @@ class HelperMethods:
         Verifies a signature from .NET RSACryptoServiceProvider.
         """
         
-        n = OS2IP(base64.b64decode(rsaPublicKey.modulus))
-        e = OS2IP(base64.b64decode(rsaPublicKey.exponent))
+        n = HelperMethods.OS2IP(base64.b64decode(rsaPublicKey.modulus))
+        e = HelperMethods.OS2IP(base64.b64decode(rsaPublicKey.exponent))
         
-        message = base64.b64decode(response.license_key.encode("utf-8"))
-        response = base64.b64decode(response.signature.encode("utf-8"))
+        m = base64.b64decode(response.license_key)
+        r = base64.b64decode(response.signature)
         
-        return RSAASSA_PKCS1_V15_VERIFY((n,e), message, signature)
+        return HelperMethods.RSAASSA_PKCS1_V15_VERIFY((n,e), m, r)
     
     @staticmethod
     def int2base64(num):
