@@ -23,6 +23,7 @@ from subprocess import Popen, PIPE
 class HelperMethods:
     
     server_address = "https://app.cryptolens.io/api/"
+    ironpython2730_legacy = False
     
     @staticmethod
     def get_SHA256(string):
@@ -118,10 +119,41 @@ class HelperMethods:
         
             method: the path of the method, eg. key/activate
             params: a dictionary of parameters
-        """    
-        return urllib2.urlopen(HelperMethods.server_address + method, \
-                                      urllib.urlencode(params)).read().decode("utf-8")
+        """
+
+        if HelperMethods.ironpython2730_legacy:
+            return HelperMethods.send_request_ironpythonlegacy(HelperMethods.server_address + method, \
+                                        urllib.urlencode(params))
+        else:
+            return urllib2.urlopen(HelperMethods.server_address + method, \
+                                        urllib.urlencode(params)).read().decode("utf-8")
+
+    @staticmethod
+    def send_request_ironpythonlegacy(uri, parameters):
+        """
+        IronPython 2.7.3 and earlier has a built in problem with
+        urlib2 library when verifying certificates. This code calls a .NET
+        library instead.
+        """
+        from System.Net import WebRequest
+        from System.IO import StreamReader
+        from System.Text import Encoding
+
+        request = WebRequest.Create(uri)
         
+        request.ContentType = "application/x-www-form-urlencoded"
+        request.Method = "POST" #work for post
+        bytes = Encoding.ASCII.GetBytes(parameters)
+        request.ContentLength = bytes.Length
+        reqStream = request.GetRequestStream()
+        reqStream.Write(bytes, 0, bytes.Length)
+        reqStream.Close()
+            
+        response = request.GetResponse()
+        result = StreamReader(response.GetResponseStream()).ReadToEnd()
+        return result
+
+
     @staticmethod    
     def start_process(command):
         
@@ -187,8 +219,8 @@ class Key:
         
         response = Response("","",0,"")
         
-        try:
-            response = Response.from_string(HelperMethods.send_request("key/activate", {"token":token,\
+        #try:
+        response = Response.from_string(HelperMethods.send_request("key/activate", {"token":token,\
                                                   "ProductId":product_id,\
                                                   "key":key,\
                                                   "MachineCode":machine_code,\
@@ -198,8 +230,8 @@ class Key:
                                                   "MaxOverdraft": max_overdraft,\
                                                   "Sign":"True",\
                                                   "SignMethod":1}))
-        except Exception:
-            return (None, "Could not contact the server.")
+        #except Exception:
+        #    return (None, "Could not contact the server.")
         
         pubkey = RSAPublicKey.from_string(rsa_pub_key)
     

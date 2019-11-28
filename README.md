@@ -6,6 +6,8 @@ Python docs can be found here: https://help.cryptolens.io/api/python/
 
 **Autodesk Maya**: The Python2 version needs to be used, as described [here](https://cryptolens.io/2019/07/autodesk-maya-plugin-software-licensing/).
 
+**Autodesk Revit / Iron Python 2.7.3**: The Python2 version needs to be used with `HelperMethods.ironpython2730_legacy = True`.
+
 ## Installation
 
 ### Python 3
@@ -19,6 +21,12 @@ Please copy `cryptolens_python2.py` file into your project folder. The entire li
 
 ```python
 from cryptolens_python2 import *
+```
+
+If you create a plugin for Autodesk Rivet or use IronPython 2.7.3 or earlier, please also add the line below right after the import:
+
+```
+HelperMethods.ironpython2730_legacy = True
 ```
 
 ## Example
