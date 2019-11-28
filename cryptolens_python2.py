@@ -219,8 +219,8 @@ class Key:
         
         response = Response("","",0,"")
         
-        #try:
-        response = Response.from_string(HelperMethods.send_request("key/activate", {"token":token,\
+        try:
+            response = Response.from_string(HelperMethods.send_request("key/activate", {"token":token,\
                                                   "ProductId":product_id,\
                                                   "key":key,\
                                                   "MachineCode":machine_code,\
@@ -230,8 +230,8 @@ class Key:
                                                   "MaxOverdraft": max_overdraft,\
                                                   "Sign":"True",\
                                                   "SignMethod":1}))
-        #except Exception:
-        #    return (None, "Could not contact the server.")
+        except Exception:
+            return (None, "Could not contact the server.")
         
         pubkey = RSAPublicKey.from_string(rsa_pub_key)
     
