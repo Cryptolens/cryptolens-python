@@ -23,7 +23,7 @@ Please copy `cryptolens_python2.py` file into your project folder. The entire li
 from cryptolens_python2 import *
 ```
 
-If you create a plugin for Autodesk Rivet or use IronPython 2.7.3 or earlier, please also add the line below right after the import:
+If you create a plugin for Autodesk Revit or use IronPython 2.7.3 or earlier, please also add the line below right after the import:
 
 ```
 HelperMethods.ironpython2730_legacy = True
