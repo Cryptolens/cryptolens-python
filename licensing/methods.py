@@ -59,7 +59,46 @@ class Key:
                     return (None, "The signature check failed.")
             except Exception:
                 return (None, "The signature check failed.")
-         
+            
+    @staticmethod
+    def get_key(token, rsa_pub_key, product_id, key, fields_to_return = 0,\
+                 metadata = False, floating_time_interval = 0):
+        
+        """
+        Calls the GetKey method in Web API 3 and returns a tuple containing
+        (LicenseKey, Message). If an error occurs, LicenseKey will be None. If
+        everything went well, no message will be returned.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/GetKey
+        """
+        
+        response = Response("","",0,"")
+        
+        try:
+            response = Response.from_string(HelperMethods.send_request("key/getkey", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "key":key,\
+                                                  "FieldsToReturn":fields_to_return,\
+                                                  "metadata":metadata,\
+                                                  "FloatingTimeInterval": floating_time_interval,\
+                                                  "Sign":"True",\
+                                                  "SignMethod":1}))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        pubkey = RSAPublicKey.from_string(rsa_pub_key)
+    
+        if response.result == 1:
+            return (None, response.message)
+        else:
+            try:
+                if HelperMethods.verify_signature(response, pubkey):
+                    return (LicenseKey.from_response(response), response.message)
+                else:
+                    return (None, "The signature check failed.")
+            except Exception:
+                return (None, "The signature check failed.")
+     
     @staticmethod
     def create_trial_key(token, product_id, machine_code):
         """
