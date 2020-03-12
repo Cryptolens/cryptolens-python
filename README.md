@@ -94,7 +94,7 @@ When loading it back, we can use the code below:
 with open('licensefile.skm', 'r') as f:
     license_key = LicenseKey.load_from_string(pubKey, f.read())
     
-    if license_key != None not Helpers.IsOnRightMachine(license_key):
+    if license_key == None or not Helpers.IsOnRightMachine(license_key):
         print("NOTE: This license file does not belong to this machine.")
     else:
         print("Feature 1: " + str(license_key.f1))
@@ -108,7 +108,7 @@ If you want to make sure that the license file is not too old, you can specify t
 with open('licensefile.skm', 'r') as f:
     license_key = LicenseKey.load_from_string(pubKey, f.read(), 30)
     
-    if license_key != None not Helpers.IsOnRightMachine(license_key):
+    if license_key == None or not Helpers.IsOnRightMachine(license_key):
         print("NOTE: This license file does not belong to this machine.")
     else:
         print("Feature 1: " + str(license_key.f1))
