@@ -104,14 +104,20 @@ class HelperMethods:
                                       .encode("utf-8")).read().decode("utf-8")
         
     @staticmethod 
-    def start_process(command):
+    def start_process(command, v = 1):
         
         process = Popen(command, stdout=PIPE)
         (output, err) = process.communicate()
         exit_code = process.wait()
-        print("\"{0}\"".format(output.decode('utf-8').replace("UUID","").strip()))
-        return output.decode('utf-8').replace("UUID","").strip()
-
+        
+        if v == 1:
+            return output.decode('utf-8')
+        elif v == 2:
+            rawOutput = output.decode('utf-8')
+            return rawOutput[rawOutput.index("UUID")+4:].strip()
+        else:
+            raise ValueError("Version can be either 1 or 2.")
+        
     @staticmethod
     def get_dbus_machine_id():
         try:

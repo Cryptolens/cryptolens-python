@@ -164,14 +164,14 @@ class Key:
 class Helpers:
     
     @staticmethod
-    def GetMachineCode():
+    def GetMachineCode(v=1):
         
         """
         Get a unique identifier for this device.
         """
         
         if "windows" in platform.platform().lower():
-            return HelperMethods.get_SHA256(HelperMethods.start_process(["cmd.exe", "/C", "wmic","csproduct", "get", "uuid"]))
+            return HelperMethods.get_SHA256(HelperMethods.start_process(["cmd.exe", "/C", "wmic","csproduct", "get", "uuid"],v))
         elif "mac" in platform.platform().lower() or "darwin" in platform.platform().lower():               
             res = HelperMethods.start_process(["system_profiler","SPHardwareDataType"])
             return HelperMethods.get_SHA256(res[res.index("UUID"):].strip())
@@ -181,13 +181,13 @@ class Helpers:
             return HelperMethods.get_SHA256(HelperMethods.compute_machine_code())
     
     @staticmethod
-    def IsOnRightMachine(license_key, is_floating_license = False, allow_overdraft=False):
+    def IsOnRightMachine(license_key, is_floating_license = False, allow_overdraft=False, v = 1):
         
         """
         Check if the device is registered with the license key.
         """
         
-        current_mid = Helpers.GetMachineCode()
+        current_mid = Helpers.GetMachineCode(v)
         
         if license_key.activated_machines == None:
             return False
