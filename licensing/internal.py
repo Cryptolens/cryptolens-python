@@ -109,7 +109,8 @@ class HelperMethods:
         process = Popen(command, stdout=PIPE)
         (output, err) = process.communicate()
         exit_code = process.wait()
-        return output.decode("utf-8")
+        print("\"{0}\"".format(output.decode('utf-8').replace("UUID","").strip()))
+        return output.decode('utf-8').replace("UUID","").strip()
 
     @staticmethod
     def get_dbus_machine_id():
