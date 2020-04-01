@@ -167,7 +167,8 @@ class Helpers:
     def GetMachineCode(v=1):
         
         """
-        Get a unique identifier for this device.
+        Get a unique identifier for this device. If you want the machine code to be the same in .NET on Windows, you
+        can set v=2. More information is available here: https://help.cryptolens.io/faq/index#machine-code-generation
         """
         
         if "windows" in platform.platform().lower():
@@ -185,6 +186,7 @@ class Helpers:
         
         """
         Check if the device is registered with the license key.
+        The version parameter is related to the one in GetMachineCode method.
         """
         
         current_mid = Helpers.GetMachineCode(v)
