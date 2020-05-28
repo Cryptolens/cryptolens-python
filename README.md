@@ -8,6 +8,8 @@ Python docs can be found here: https://help.cryptolens.io/api/python/
 
 **Autodesk Revit / Iron Python 2.7.3**: The Python2 version needs to be used with `HelperMethods.ironpython2730_legacy = True`.
 
+> Please check out our guide about common errors and how to solve them: https://help.cryptolens.io/faq/index#troubleshooting-api-errors
+
 ## Installation
 
 ### Python 3
