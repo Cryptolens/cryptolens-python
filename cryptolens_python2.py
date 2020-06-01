@@ -19,6 +19,7 @@ import urllib2
 import urllib
 import hashlib
 from subprocess import Popen, PIPE
+from urllib2 import URLError, HTTPError
 
 class HelperMethods:
     
@@ -230,8 +231,12 @@ class Key:
                                                   "MaxOverdraft": max_overdraft,\
                                                   "Sign":"True",\
                                                   "SignMethod":1}))
+        except HTTPError as e:
+            response = Response.from_string(e.read())
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + e.reason)
         except Exception:
-            return (None, "Could not contact the server.")
+            return (None, "Could not contact the server. Error message: " + e.reason)
         
         pubkey = RSAPublicKey.from_string(rsa_pub_key)
     
@@ -269,8 +274,12 @@ class Key:
                                                   "FloatingTimeInterval": floating_time_interval,\
                                                   "Sign":"True",\
                                                   "SignMethod":1}))
+        except HTTPError as e:
+            response = Response.from_string(e.read())
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + e.reason)
         except Exception:
-            return (None, "Could not contact the server.")
+            return (None, "Could not contact the server. Error message: " + e.reason)
         
         pubkey = RSAPublicKey.from_string(rsa_pub_key)
     
@@ -301,8 +310,12 @@ class Key:
             response = HelperMethods.send_request("key/createtrialkey", {"token":token,\
                                                   "ProductId":product_id,\
                                                   "MachineCode":machine_code})
+        except HTTPError as e:
+            response = Response.from_string(e.read())
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + e.reason)
         except Exception:
-            return (None, "Could not contact the server.")
+            return (None, "Could not contact the server. Error message: " + e.reason)
         
         jobj = json.loads(response)
 
@@ -335,8 +348,12 @@ class Key:
                                                   "Key" : key,\
                                                   "Floating" : floating,\
                                                   "MachineCode":machine_code})
+        except HTTPError as e:
+            response = Response.from_string(e.read())
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + e.reason)
         except Exception:
-            return (False, "Could not contact the server.")
+            return (None, "Could not contact the server. Error message: " + e.reason)
         
         jobj = json.loads(response)
 
