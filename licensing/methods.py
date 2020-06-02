@@ -22,7 +22,7 @@ class Key:
     @staticmethod
     def activate(token, rsa_pub_key, product_id, key, machine_code, fields_to_return = 0,\
                  metadata = False, floating_time_interval = 0,\
-                 max_overdraft = 0):
+                 max_overdraft = 0, friendly_name = None):
         
         """
         Calls the Activate method in Web API 3 and returns a tuple containing
@@ -43,6 +43,8 @@ class Key:
                                                   "metadata":metadata,\
                                                   "FloatingTimeInterval": floating_time_interval,\
                                                   "MaxOverdraft": max_overdraft,\
+                                                  "FriendlyName" : friendly_name,\
+                                                  "ModelVersion": 2 ,\
                                                   "Sign":"True",\
                                                   "SignMethod":1}))
         except HTTPError as e:

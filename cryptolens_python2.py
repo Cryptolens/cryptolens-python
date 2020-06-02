@@ -208,7 +208,7 @@ class Key:
     @staticmethod
     def activate(token, rsa_pub_key, product_id, key, machine_code, fields_to_return = 0,\
                  metadata = False, floating_time_interval = 0,\
-                 max_overdraft = 0):
+                 max_overdraft = 0, friendly_name=None):
         
         """
         Calls the Activate method in Web API 3 and returns a tuple containing
@@ -229,6 +229,8 @@ class Key:
                                                   "metadata":metadata,\
                                                   "FloatingTimeInterval": floating_time_interval,\
                                                   "MaxOverdraft": max_overdraft,\
+                                                  "FriendlyName" : friendly_name,\
+                                                  "ModelVersion" : 2,\
                                                   "Sign":"True",\
                                                   "SignMethod":1}))
         except HTTPError as e:
@@ -418,12 +420,13 @@ import copy
 import time
 
 class ActivatedMachine:
-    def __init__(self, IP, Mid, Time):
+    def __init__(self, IP, Mid, Time, FriendlyName = ""):
         self.IP = IP
         self.Mid = Mid
         
         # TODO: check if time is int, and convert to datetime in this case.
         self.Time = Time
+        self.FriendlyName = FriendlyName
 
 class LicenseKey:
     
