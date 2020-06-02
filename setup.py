@@ -8,7 +8,7 @@ setup(
   author = 'Cryptolens AB',                   # Type in your name
   author_email = 'support@cryptolens.io',      # Type in your E-Mail
   url = 'https://cryptolens.io',   # Provide either the link to your github or to your website
-  download_url = 'https://github.com/Cryptolens/cryptolens-python/archive/v_16.tar.gz',    # I explain this later on
+  download_url = 'https://github.com/Cryptolens/cryptolens-python/archive/v_17.tar.gz',    # I explain this later on
   keywords = ['software licensing', 'licensing library', 'cryptolens'],   # Keywords that define your package best
   classifiers=[
     #'Development Status :: 5 - Stable',      # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
