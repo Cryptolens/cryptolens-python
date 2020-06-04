@@ -50,9 +50,9 @@ class Key:
         except HTTPError as e:
             response = Response.from_string(e.read())
         except URLError as e:
-            return (None, "Could not contact the server. Error message: " + e.reason)
+            return (None, "Could not contact the server. Error message: " + str(e))
         except Exception:
-            return (None, "Could not contact the server. Error message: " + e.reason)
+            return (None, "Could not contact the server.")
         
         pubkey = RSAPublicKey.from_string(rsa_pub_key)
     
@@ -93,9 +93,9 @@ class Key:
         except HTTPError as e:
             response = Response.from_string(e.read())
         except URLError as e:
-            return (None, "Could not contact the server. Error message: " + e.reason)
+            return (None, "Could not contact the server. Error message: " + str(e))
         except Exception:
-            return (None, "Could not contact the server. Error message: " + e.reason)
+            return (None, "Could not contact the server.")
         
         pubkey = RSAPublicKey.from_string(rsa_pub_key)
     
@@ -129,9 +129,9 @@ class Key:
         except HTTPError as e:
             response = Response.from_string(e.read())
         except URLError as e:
-            return (None, "Could not contact the server. Error message: " + e.reason)
+            return (None, "Could not contact the server. Error message: " + str(e))
         except Exception:
-            return (None, "Could not contact the server. Error message: " + e.reason)
+            return (None, "Could not contact the server.")
         
         jobj = json.loads(response)
 
@@ -164,9 +164,9 @@ class Key:
         except HTTPError as e:
             response = Response.from_string(e.read())
         except URLError as e:
-            return (None, "Could not contact the server. Error message: " + e.reason)
+            return (None, "Could not contact the server. Error message: " + str(e))
         except Exception:
-            return (None, "Could not contact the server. Error message: " + e.reason)
+            return (None, "Could not contact the server.")
         
         jobj = json.loads(response)
 
