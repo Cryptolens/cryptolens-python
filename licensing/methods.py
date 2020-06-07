@@ -180,7 +180,7 @@ class Key:
 
     @staticmethod
     def get_web_api_log(token, product_id = 0, key = "", machine_code="", friendly_name = "",\
-                        limit = 10, starting_after = 0, ending_before=0):
+                        limit = 10, starting_after = 0, ending_before=0, order_by=""):
         
         """
         This method will retrieve a list of Web API Logs. All events that get
@@ -201,6 +201,7 @@ class Key:
                                                   "FriendlyName":friendly_name,\
                                                   "Limit": limit,\
                                                   "StartingAfter": starting_after,\
+                                                  "OrderBy" : order_by,\
                                                   "EndingBefore": ending_before})
         except HTTPError as e:
             response = e.read()
