@@ -178,6 +178,46 @@ class Key:
            
         return (True, "")
 
+    @staticmethod
+    def get_web_api_log(token, product_id = 0, key = "", machine_code="", friendly_name = "",\
+                        limit = 10, starting_after = 0, ending_before=0):
+        
+        """
+        This method will retrieve a list of Web API Logs. All events that get
+        logged are related to a change of a license key or data object, eg. when
+        license key gets activated or when a property of data object changes. More details
+        about the method that was called are specified in the State field.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/GetWebAPILog
+        """
+        
+        response = ""
+                
+        try:
+            response = HelperMethods.send_request("ai/getwebapilog", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Key":key,\
+                                                  "MachineCode":machine_code,\
+                                                  "FriendlyName":friendly_name,\
+                                                  "Limit": limit,\
+                                                  "StartingAfter": starting_after,\
+                                                  "EndingBefore": ending_before})
+        except HTTPError as e:
+            response = Response.from_string(e.read())
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (jobj["logs"], "")
             
             
 class Helpers:
