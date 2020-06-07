@@ -127,7 +127,7 @@ class Key:
                                                   "ProductId":product_id,\
                                                   "MachineCode":machine_code})
         except HTTPError as e:
-            response = Response.from_string(e.read())
+            response = e.read()
         except URLError as e:
             return (None, "Could not contact the server. Error message: " + str(e))
         except Exception:
@@ -162,7 +162,7 @@ class Key:
                                                   "Floating" : floating,\
                                                   "MachineCode":machine_code})
         except HTTPError as e:
-            response = Response.from_string(e.read())
+            response = e.read()
         except URLError as e:
             return (None, "Could not contact the server. Error message: " + str(e))
         except Exception:
@@ -203,7 +203,7 @@ class Key:
                                                   "StartingAfter": starting_after,\
                                                   "EndingBefore": ending_before})
         except HTTPError as e:
-            response = Response.from_string(e.read())
+            response = e.read()
         except URLError as e:
             return (None, "Could not contact the server. Error message: " + str(e))
         except Exception:
