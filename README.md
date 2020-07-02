@@ -54,24 +54,28 @@ from cryptolens_python2 import *
 Now we can perform the actual key verification:
 
 ```python
-pubKey = "<RSAKeyValue><Modulus>sGbvxwdlDbqFXOMlVUnAF5ew0t0WpPW7rFpI5jHQOFkht/326dvh7t74RYeMpjy357NljouhpTLA3a6idnn4j6c3jmPWBkjZndGsPL4Bqm+fwE48nKpGPjkj4q/yzT4tHXBTyvaBjA8bVoCTnu+LiC4XEaLZRThGzIn5KQXKCigg6tQRy0GXE13XYFVz/x1mjFbT9/7dS8p85n8BuwlY5JvuBIQkKhuCNFfrUxBWyu87CFnXWjIupCD2VO/GbxaCvzrRjLZjAngLCMtZbYBALksqGPgTUN7ZM24XbPWyLtKPaXF2i4XRR9u6eTj5BfnLbKAU5PIVfjIS+vNYYogteQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>"
+RSAPubKey = "<RSAKeyValue><Modulus>sGbvxwdlDbqFXOMlVUnAF5ew0t0WpPW7rFpI5jHQOFkht/326dvh7t74RYeMpjy357NljouhpTLA3a6idnn4j6c3jmPWBkjZndGsPL4Bqm+fwE48nKpGPjkj4q/yzT4tHXBTyvaBjA8bVoCTnu+LiC4XEaLZRThGzIn5KQXKCigg6tQRy0GXE13XYFVz/x1mjFbT9/7dS8p85n8BuwlY5JvuBIQkKhuCNFfrUxBWyu87CFnXWjIupCD2VO/GbxaCvzrRjLZjAngLCMtZbYBALksqGPgTUN7ZM24XbPWyLtKPaXF2i4XRR9u6eTj5BfnLbKAU5PIVfjIS+vNYYogteQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>"
+auth = "WyIyNTU1IiwiRjdZZTB4RmtuTVcrQlNqcSszbmFMMHB3aWFJTlBsWW1Mbm9raVFyRyJd=="
 
-res = Key.activate(token="WyIyNTU1IiwiRjdZZTB4RmtuTVcrQlNqcSszbmFMMHB3aWFJTlBsWW1Mbm9raVFyRyJd",\
-                   rsa_pub_key=pubKey,\
-                   product_id=3349, key="ICVLD-VVSZR-ZTICT-YKGXL", \
+result = Key.activate(token=auth,\
+                   rsa_pub_key=RSAPubKey,\
+                   product_id=3349, \
+                   key="ICVLD-VVSZR-ZTICT-YKGXL",\
                    machine_code=Helpers.GetMachineCode())
 
-if res[0] == None or not Helpers.IsOnRightMachine(res[0]):
-    print("An error occurred: {0}".format(res[1]))
+if result[0] == None or not Helpers.IsOnRightMachine(result[0]):
+    # an error occurred or the key is invalid or it cannot be activated
+    # (eg. the limit of activated devices was achieved)
+    print("The license does not work: {0}".format(result[1]))
 else:
-    print("Success")
-    
-    license_key = res[0]
+    # everything went fine if we are here!
+    print("The license is valid!")
+    license_key = result[0]
     print("Feature 1: " + str(license_key.f1))
     print("License expires: " + str(license_key.expires))
 ```
 
-* `pubKey` - the RSA public key (can be found [here](https://app.cryptolens.io/docs/api/v3/QuickStart#api-keys), in *API Keys* section).
+* `RSAPubKey` - the RSA public key (can be found [here](https://app.cryptolens.io/docs/api/v3/QuickStart#api-keys), in *API Keys* section).
 * `token` - the access token (can be found [here](https://app.cryptolens.io/docs/api/v3/QuickStart#api-keys), in *API Keys* section).
 * `product_id` - the id of the product can be found on the product page.
 * `key` - the license key to be verified
@@ -83,10 +87,10 @@ Assuming the license key verification was successful, we can save the result in 
 
 ```python
 # res is obtained from the code above
-if res[0] != None:
+if result[0] != None:
     # saving license file to disk
     with open('licensefile.skm', 'w') as f:
-        f.write(res[0].save_as_string())
+        f.write(result[0].save_as_string())
 ```
 
 When loading it back, we can use the code below:
@@ -126,21 +130,23 @@ The code below has a floatingTimeInterval of 300 seconds and maxOverdraft set to
 from licensing.models import *
 from licensing.methods import Key, Helpers
 
-pubKey = "<RSAKeyValue><Modulus>sGbvxwdlDbqFXOMlVUnAF5ew0t0WpPW7rFpI5jHQOFkht/326dvh7t74RYeMpjy357NljouhpTLA3a6idnn4j6c3jmPWBkjZndGsPL4Bqm+fwE48nKpGPjkj4q/yzT4tHXBTyvaBjA8bVoCTnu+LiC4XEaLZRThGzIn5KQXKCigg6tQRy0GXE13XYFVz/x1mjFbT9/7dS8p85n8BuwlY5JvuBIQkKhuCNFfrUxBWyu87CFnXWjIupCD2VO/GbxaCvzrRjLZjAngLCMtZbYBALksqGPgTUN7ZM24XbPWyLtKPaXF2i4XRR9u6eTj5BfnLbKAU5PIVfjIS+vNYYogteQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>"
+RSAPubKey = "<RSAKeyValue><Modulus>sGbvxwdlDbqFXOMlVUnAF5ew0t0WpPW7rFpI5jHQOFkht/326dvh7t74RYeMpjy357NljouhpTLA3a6idnn4j6c3jmPWBkjZndGsPL4Bqm+fwE48nKpGPjkj4q/yzT4tHXBTyvaBjA8bVoCTnu+LiC4XEaLZRThGzIn5KQXKCigg6tQRy0GXE13XYFVz/x1mjFbT9/7dS8p85n8BuwlY5JvuBIQkKhuCNFfrUxBWyu87CFnXWjIupCD2VO/GbxaCvzrRjLZjAngLCMtZbYBALksqGPgTUN7ZM24XbPWyLtKPaXF2i4XRR9u6eTj5BfnLbKAU5PIVfjIS+vNYYogteQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>"
+auth = "WyIyNTU1IiwiRjdZZTB4RmtuTVcrQlNqcSszbmFMMHB3aWFJTlBsWW1Mbm9raVFyRyJd=="
 
-res = Key.activate(token="WyIyNjA1IiwiTjhZQUpIYXJPaVdBV0ozQUlKVC9tamdDbFZDRzhZRHpaU243L2R2eCJd",\
-                   rsa_pub_key=pubKey,\
-                   product_id=3349, key="MTMPW-VZERP-JZVNZ-SCPZM", \
+result = Key.activate(token=auth,\
+                   rsa_pub_key=RSAPubKey,\
+                   product_id=3349, \
+                   key="ICVLD-VVSZR-ZTICT-YKGXL",\
                    machine_code=Helpers.GetMachineCode(),\
                    floating_time_interval=300,\
                    max_overdraft=1)
 
-if res[0] == None or not Helpers.IsOnRightMachine(res[0], is_floating_license=True, allow_overdraft=True):
-    print("An error occurred: {0}".format(res[1]))
+if result[0] == None or not Helpers.IsOnRightMachine(res[0], is_floating_license=True, allow_overdraft=True):
+    print("An error occurred: {0}".format(result[1]))
 else:
     print("Success")
     
-    license_key = res[0]
+    license_key = result[0]
     print("Feature 1: " + str(license_key.f1))
     print("License expires: " + str(license_key.expires))
 ```
@@ -169,19 +175,22 @@ if trial_key[0] == None:
     print("An error occurred: {0}".format(trial_key[1]))
 
 
-pubKey = "<RSAKeyValue><Modulus>sGbvxwdlDbqFXOMlVUnAF5ew0t0WpPW7rFpI5jHQOFkht/326dvh7t74RYeMpjy357NljouhpTLA3a6idnn4j6c3jmPWBkjZndGsPL4Bqm+fwE48nKpGPjkj4q/yzT4tHXBTyvaBjA8bVoCTnu+LiC4XEaLZRThGzIn5KQXKCigg6tQRy0GXE13XYFVz/x1mjFbT9/7dS8p85n8BuwlY5JvuBIQkKhuCNFfrUxBWyu87CFnXWjIupCD2VO/GbxaCvzrRjLZjAngLCMtZbYBALksqGPgTUN7ZM24XbPWyLtKPaXF2i4XRR9u6eTj5BfnLbKAU5PIVfjIS+vNYYogteQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>"
+RSAPubKey = "<RSAKeyValue><Modulus>sGbvxwdlDbqFXOMlVUnAF5ew0t0WpPW7rFpI5jHQOFkht/326dvh7t74RYeMpjy357NljouhpTLA3a6idnn4j6c3jmPWBkjZndGsPL4Bqm+fwE48nKpGPjkj4q/yzT4tHXBTyvaBjA8bVoCTnu+LiC4XEaLZRThGzIn5KQXKCigg6tQRy0GXE13XYFVz/x1mjFbT9/7dS8p85n8BuwlY5JvuBIQkKhuCNFfrUxBWyu87CFnXWjIupCD2VO/GbxaCvzrRjLZjAngLCMtZbYBALksqGPgTUN7ZM24XbPWyLtKPaXF2i4XRR9u6eTj5BfnLbKAU5PIVfjIS+vNYYogteQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>"
+auth = "WyIyNTU1IiwiRjdZZTB4RmtuTVcrQlNqcSszbmFMMHB3aWFJTlBsWW1Mbm9raVFyRyJd=="
 
-res = Key.activate(token="WyIyNTU1IiwiRjdZZTB4RmtuTVcrQlNqcSszbmFMMHB3aWFJTlBsWW1Mbm9raVFyRyJd",\
-                   rsa_pub_key=pubKey,\
-                   product_id=3941, key=trial_key[0], \
+result = Key.activate(token=auth,\
+                   rsa_pub_key=RSAPubKey,\
+                   product_id=3349, \
+                   key=trial_key[0],\
                    machine_code=Helpers.GetMachineCode())
 
-if res[0] == None or not Helpers.IsOnRightMachine(res[0]):
-    print("An error occurred: {0}".format(res[1]))
+
+if result[0] == None or not Helpers.IsOnRightMachine(result[0]):
+    print("An error occurred: {0}".format(result[1]))
 else:
     print("Success")
     
-    license_key = res[0]
+    license_key = result[0]
     print("Feature 1: " + str(license_key.f1))
     print("License expires: " + str(license_key.expires))
 ```
