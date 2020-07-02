@@ -7,7 +7,28 @@ Created on Wed Jan 23 10:12:13 2019
 import base64
 import urllib.request
 import hashlib
-from subprocess import Popen, PIPE
+import subprocess
+import os, os.path
+
+def subprocess_args(include_stdout=True):
+    if hasattr(subprocess, 'STARTUPINFO'):
+        si = subprocess.STARTUPINFO()
+        si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        env = os.environ
+    else:
+        si = None
+        env = None
+
+    if include_stdout:
+        ret = {'stdout': subprocess.PIPE}
+    else:
+        ret = {}
+
+    ret.update({'stdin': subprocess.PIPE,
+                'stderr': subprocess.PIPE,
+                'startupinfo': si,
+                'env': env })
+    return ret
 
 class HelperMethods:
     
@@ -105,11 +126,10 @@ class HelperMethods:
         
     @staticmethod 
     def start_process(command, v = 1):
-        
-        process = Popen(command, stdout=PIPE)
-        (output, err) = process.communicate()
-        exit_code = process.wait()
-        
+
+        output = subprocess.check_output(command,
+                              **subprocess_args(False))
+
         if v == 1:
             return output.decode('utf-8')
         elif v == 2:
