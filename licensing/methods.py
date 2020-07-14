@@ -214,12 +214,42 @@ class Key:
 
         if jobj == None or not("result" in jobj) or jobj["result"] == 1:
             if jobj != None:
-                return (False, jobj["message"])
+                return (None, jobj["message"])
             else:
-               return (False, "Could not contact the server.")
+               return (None, "Could not contact the server.")
            
         return (jobj["logs"], "")
             
+class Message:
+    
+    @staticmethod
+    def get_messages(token, channel="", time=0):
+        
+        """
+        This method will return a list of messages that were broadcasted.
+        You can create new messages here. Messages can be filtered based on the time and the channel.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/GetMessages
+        """
+        
+        try:
+            response = HelperMethods.send_request("/message/getmessages/", {"token":token, "Channel": channel, "Time": time})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj["messages"], "")
             
 class Helpers:
     
@@ -265,4 +295,3 @@ class Helpers:
                     return True
             
         return False
-        
