@@ -220,6 +220,27 @@ class Key:
            
         return (jobj["logs"], "")
             
+class Message:
+    @staticmethod
+    def GetMessages(token, channel, time=0):
+        try:
+            response = HelperMethods.send_request("/message/getmessages/", {"token":token, "Channel": channel, "Time": time})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return ([], "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return ([], "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return ([], jobj["message"])
+            else:
+               return ([], "Could not contact the server.")
+
+        return (jobj["messages"], "")
             
 class Helpers:
     
@@ -265,4 +286,3 @@ class Helpers:
                     return True
             
         return False
-        
