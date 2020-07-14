@@ -221,8 +221,9 @@ class Key:
         return (jobj["logs"], "")
             
 class Message:
+    
     @staticmethod
-    def get_messages(token, channel, time=0):
+    def get_messages(token, channel="", time=0):
         
         """
         This method will return a list of messages that were broadcasted.
