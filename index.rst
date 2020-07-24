@@ -13,6 +13,8 @@ Welcome to cryptolens python's documentation!
    :members:
 .. autoclass:: licensing.methods.Key
     :members:
+.. autoclass:: licensing.methods.Message
+    :members:
 .. autoclass:: licensing.models.LicenseKey
     :members:
 .. autoclass:: licensing.methods.Helpers
