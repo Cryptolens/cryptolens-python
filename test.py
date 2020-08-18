@@ -6,7 +6,7 @@ Created on Wed Jan 23 09:34:40 2019
 """
 
 from licensing.models import *
-from licensing.methods import Key, Helpers, Message, Product
+from licensing.methods import Key, Helpers, Message, Product, Customer
 
 import socket
 

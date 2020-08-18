@@ -283,6 +283,46 @@ class Product:
                return (None, "Could not contact the server.")
 
         return (jobj["products"], "")
+    
+    
+class Customer:
+    
+    @staticmethod
+    def add_customer(token, name = "", email = "", company_name="",\
+                     enable_customer_association = False,\
+                     allow_activation_management = False ):
+        
+        """
+        This method will add new customer.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/AddCustomer
+        """
+        
+        try:
+            response = HelperMethods.send_request("/customer/addcustomer/",\
+                                                  {"token":token,\
+                                                   "Name": name,\
+                                                   "Email": email,\
+                                                   "CompanyName": company_name,\
+                                                   "EnableCustomerAssociation": enable_customer_association,\
+                                                   "AllowActivationManagement": allow_activation_management
+                                                   })
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
             
 class Helpers:
     
