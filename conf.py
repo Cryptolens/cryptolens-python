@@ -21,7 +21,7 @@ from licensing import *
 # -- Project information -----------------------------------------------------
 
 project = 'cryptolens python'
-copyright = '2019, Cryptolens AB'
+copyright = '2020, Cryptolens AB'
 author = 'Cryptolens AB'
 
 # The short X.Y version
