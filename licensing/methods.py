@@ -144,6 +144,75 @@ class Key:
         return (jobj["key"], "")
     
     @staticmethod
+    def create_key(token, product_id, period = 0,\
+                   f1=False,\
+                   f2=False,\
+                   f3=False,\
+                   f4=False,\
+                   f5=False,\
+                   f6=False,\
+                   f7=False,\
+                   f8=False,\
+                   notes="",\
+                   block=False,\
+                   customer_id=0,\
+                   new_customer=False,\
+                   add_or_use_existing_customer=False,\
+                   trial_activation=False,\
+                   max_no_of_machines=0,\
+                   no_of_keys=1):
+        """
+        This method allows you to create a new license key. The license can
+        either be standalone or associated to a specific customer. It is also
+        possible to add a new customer and associate it with the newly created
+        license using NewCustomer parameter. If you would like to avoid
+        duplicates based on the email, you can use the AddOrUseExistingCustomer
+        parameter.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/CreateKey/
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("key/createkey", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Period":period,\
+                                                  "F1": f1,\
+                                                  "F2": f2,\
+                                                  "F3": f3,\
+                                                  "F4": f4,\
+                                                  "F5": f5,\
+                                                  "F6": f6,\
+                                                  "F7": f7,\
+                                                  "F8": f2,\
+                                                  "Notes": notes,\
+                                                  "Block": block,\
+                                                  "CustomerId": customer_id,\
+                                                  "NewCustomer": f2,\
+                                                  "AddOrUseExistingCustomer": add_or_use_existing_customer,\
+                                                  "TrialActivation": trial_activation,\
+                                                  "MaxNoOfMachines": max_no_of_machines,\
+                                                  "NoOfKeys":no_of_keys})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+           
+        return (jobj, "")
+    
+    
+    @staticmethod
     def deactivate(token, product_id, key, machine_code, floating = False):
         """
         Calls the Deactivate method in Web API 3 and returns a tuple containing
