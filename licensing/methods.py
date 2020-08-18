@@ -250,6 +250,39 @@ class Message:
                return (None, "Could not contact the server.")
 
         return (jobj["messages"], "")
+    
+    
+class Product:
+    
+    @staticmethod
+    def get_products(token):
+        
+        """
+        This method will return the list of products. Each product contains fields such as
+        the name and description, as well feature definitions and data objects. All the fields
+        of a product are available here: https://app.cryptolens.io/docs/api/v3/model/Product
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/GetProducts
+        """
+        
+        try:
+            response = HelperMethods.send_request("/product/getproducts/", {"token":token})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj["products"], "")
             
 class Helpers:
     
