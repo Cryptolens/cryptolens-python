@@ -185,11 +185,11 @@ class Key:
                                                   "F5": f5,\
                                                   "F6": f6,\
                                                   "F7": f7,\
-                                                  "F8": f2,\
+                                                  "F8": f8,\
                                                   "Notes": notes,\
                                                   "Block": block,\
                                                   "CustomerId": customer_id,\
-                                                  "NewCustomer": f2,\
+                                                  "NewCustomer": new_customer,\
                                                   "AddOrUseExistingCustomer": add_or_use_existing_customer,\
                                                   "TrialActivation": trial_activation,\
                                                   "MaxNoOfMachines": max_no_of_machines,\
