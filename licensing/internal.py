@@ -35,7 +35,7 @@ class HelperMethods:
     
     server_address = "https://app.cryptolens.io/api/"
     
-    verify_SLL = True
+    verify_SSL = True
     
     @staticmethod
     def get_SHA256(string):
