@@ -9,6 +9,7 @@ import urllib.request
 import hashlib
 import subprocess
 import os, os.path
+import ssl
 
 def subprocess_args(include_stdout=True):
     if hasattr(subprocess, 'STARTUPINFO'):
@@ -33,6 +34,8 @@ def subprocess_args(include_stdout=True):
 class HelperMethods:
     
     server_address = "https://app.cryptolens.io/api/"
+    
+    verify_SLL = True
     
     @staticmethod
     def get_SHA256(string):
@@ -119,10 +122,22 @@ class HelperMethods:
         
             method: the path of the method, eg. key/activate
             params: a dictionary of parameters
-        """    
-        return urllib.request.urlopen(HelperMethods.server_address + method, \
+        """
+        
+        if HelperMethods.verify_SLL:
+            return urllib.request.urlopen(HelperMethods.server_address + method, \
                                       urllib.parse.urlencode(params)\
                                       .encode("utf-8")).read().decode("utf-8")
+        else:
+            ctx = ssl.create_default_context()
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+            
+            return urllib.request.urlopen(HelperMethods.server_address + method, \
+                                      urllib.parse.urlencode(params)\
+                                      .encode("utf-8"), context=ctx).read().decode("utf-8")
+            
+            
         
     @staticmethod 
     def start_process(command, v = 1):
