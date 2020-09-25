@@ -124,7 +124,7 @@ class HelperMethods:
             params: a dictionary of parameters
         """
         
-        if HelperMethods.verify_SLL:
+        if HelperMethods.verify_SSL:
             return urllib.request.urlopen(HelperMethods.server_address + method, \
                                       urllib.parse.urlencode(params)\
                                       .encode("utf-8")).read().decode("utf-8")
