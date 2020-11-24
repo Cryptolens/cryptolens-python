@@ -393,6 +393,53 @@ class Customer:
 
         return (jobj, "")
             
+class Data:
+    
+    """
+    Data object related methods
+    """
+    
+    @staticmethod
+    def increment_int_value_to_key(token, product_id, key, object_id,\
+                                   int_value=0, enable_bound=False, bound=0):
+        
+        """
+        This method will increment the int value of a data object associated with a license key.
+        
+        When creating an access token to this method, remember to include "IncrementIntValue" permission and 
+        set the "Lock to key" value to -1.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/IncrementIntValue (see parameters under Method 2)
+        """
+        
+        try:
+            response = HelperMethods.send_request("/data/IncrementIntValueToKey/",\
+                                                  {"token":token,\
+                                                   "ProductId" : product_id,\
+                                                   "Key" : key,\
+                                                   "Id" : object_id,\
+                                                   "IntValue": int_value ,\
+                                                   "EnableBound": str(enable_bound),\
+                                                   "Bound" : bound
+                                                   })
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
+    
+
 class Helpers:
     
     @staticmethod
