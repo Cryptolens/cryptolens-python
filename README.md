@@ -81,7 +81,7 @@ else:
 * `key` - the license key to be verified
 * `machine_code` - the unique id of the device.
 
-**Note:** The code above assumes that node-locking is enabled. By default, license keys created with _Maximum Number of Machines_ set to zero, which deactivates node-locking. As a result, machines will not be registered and the call to `Helpers.IsOnRightMachine(result[0])` will return `False`. You can read more about this behaviour [here](https://help.cryptolens.io/faq/index#maximum-number-of-machines).
+**Note:** The code above assumes that node-locking is enabled. By default, license keys are created with _Maximum Number of Machines_ set to zero, which deactivates node-locking. As a result, machines will not be registered and the call to `Helpers.IsOnRightMachine(result[0])` will return `False`. You can read more about this behaviour [here](https://help.cryptolens.io/faq/index#maximum-number-of-machines).
 
 ### Offline activation (saving/loading licenses)
 
