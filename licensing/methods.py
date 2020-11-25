@@ -461,14 +461,19 @@ class Helpers:
             return HelperMethods.get_SHA256(HelperMethods.compute_machine_code())
     
     @staticmethod
-    def IsOnRightMachine(license_key, is_floating_license = False, allow_overdraft=False, v = 1):
+    def IsOnRightMachine(license_key, is_floating_license = False, allow_overdraft=False, v = 1, custom_machine_code = None):
         
         """
         Check if the device is registered with the license key.
         The version parameter is related to the one in GetMachineCode method.
         """
         
-        current_mid = Helpers.GetMachineCode(v)
+        current_mid = ""
+        
+        if custom_machine_code == None:
+            current_mid = Helpers.GetMachineCode(v)
+        else:
+            current_mid = custom_machine_code
         
         if license_key.activated_machines == None:
             return False
