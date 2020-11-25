@@ -489,3 +489,16 @@ class Helpers:
                     return True
             
         return False
+    
+    
+    @staticmethod
+    def GetMACAddress():
+        
+        """
+        An alternative way to compute the machine code (device identifier).
+        This method is especially useful if you plan to target multiple platforms.
+        """
+        
+        import uuid
+        
+        return ':'.join(['{:02x}'.format((uuid.getnode() >> ele) & 0xff) for ele in range(0,8*6,8)][::-1])
