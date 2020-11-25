@@ -439,6 +439,52 @@ class Data:
 
         return (jobj, "")
     
+    
+class PaymentForm:
+    
+    @staticmethod
+    def create_session(token, payment_form_id, currency, expires, price=None,\
+                       heading = None, product_name = None, custom_field='',\
+                       metadata = None):
+        
+        
+        """
+        This method will create a new session for a Payment Form.
+        It allows you to customize appearance of the form (such as price, heading, etc).
+        You should only create new sessions from a server side (i.e. never directly from your application).
+        Note, session will only work once and it will eventually expire depending on Expires parameter.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/PFCreateSession
+        """
+        
+        try:
+            response = HelperMethods.send_request("/paymentform/CreateSession/",\
+                                                  {"token":token,\
+                                                   "PaymentFormId" : payment_form_id,\
+                                                   "Price" : price,\
+                                                   "Currency" : currency,\
+                                                   "Heading": heading ,\
+                                                   "ProductName": product_name,\
+                                                   "CustomField" : custom_field,\
+                                                   "Metadata" : metadata,\
+                                                   "Expires" : expires,\
+                                                   })
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
 
 class Helpers:
     
