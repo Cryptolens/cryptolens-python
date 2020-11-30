@@ -246,7 +246,81 @@ class Key:
                return (False, "Could not contact the server.")
            
         return (True, "")
+    
+    
+    @staticmethod
+    def extend_license(token, product_id, key, no_of_days):
+        """
+        This method will extend a license by a certain amount of days.
+        If the key algorithm in the product is SKGL, the key string will
+        be changed if necessary. Otherwise, if SKM15 is used, the key will
+        stay the same. More about the way this method works in Remarks.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/ExtendLicense
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("key/ExtendLicense", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Key" : key,\
+                                                  "NoOfDays" : no_of_days})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
 
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (True, jobj["message"])
+    
+    @staticmethod
+    def block_key(token, product_id, key):
+        """
+        This method will block a specific license key to ensure that the key
+        cannot be accessible by most of the methods in the Web API 
+        (activation, validation, optional field, and deactivation). Note,
+        blocking the key will still allow you to access the key in Web API 3,
+        unless otherwise stated for a given Web API 3 method. 
+        To do the reverse, please see Unblock Key.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/BlockKey
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("/key/BlockKey", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Key" : key})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (True, jobj["message"])
+
+class AI:
+    
     @staticmethod
     def get_web_api_log(token, product_id = 0, key = "", machine_code="", friendly_name = "",\
                         limit = 10, starting_after = 0, ending_before=0, order_by=""):
