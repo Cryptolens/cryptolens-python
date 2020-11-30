@@ -14,20 +14,39 @@ import time
 from licensing.internal import HelperMethods
 
 class ActivatedMachine:
-    def __init__(self, IP, Mid, Time, FriendlyName=""):
+    def __init__(self, IP, Mid, Time, FriendlyName="", FloatingExpires = ""):
         self.IP = IP
         self.Mid = Mid
         
         # TODO: check if time is int, and convert to datetime in this case.
         self.Time = Time
         self.FriendlyName = FriendlyName
+        self.FloatingExpires = FloatingExpires
+        
+class Reseller:
+    
+    """
+    Information about the reseller.
+    """
+    
+    def __init__(self, Id, InviteId, ResellerUserId, Created, Name, Url, Email, Phone, Description):
+        self.Id = Id
+        self.InviteId = InviteId
+        self.ResellerUserId = ResellerUserId
+        self.Created = Created
+        self.Name = Name
+        self.Url = Url
+        self.Email = Email
+        self.Phone = Phone
+        self.Description = Description
+                
 
 class LicenseKey:
     
     def __init__(self, ProductId, ID, Key, Created, Expires, Period, F1, F2,\
                  F3, F4, F5, F6, F7, F8, Notes, Block, GlobalId, Customer, \
                  ActivatedMachines, TrialActivation, MaxNoOfMachines, \
-                 AllowedMachines, DataObjects, SignDate, RawResponse):
+                 AllowedMachines, DataObjects, SignDate, Reseller, RawResponse):
         
         self.product_id = ProductId
         self.id = ID
@@ -53,6 +72,7 @@ class LicenseKey:
         self.allowed_machines = AllowedMachines
         self.data_objects = DataObjects
         self.sign_date = SignDate
+        self.reseller = Reseller
         self.raw_response = RawResponse
         
     @staticmethod
@@ -63,13 +83,18 @@ class LicenseKey:
         
         obj = json.loads(base64.b64decode(response.license_key).decode('utf-8'))
         
+        reseller = None
+        
+        if "Reseller" in obj and obj["Reseller"] != None:
+            reseller = Reseller(**obj["Reseller"])
+        
         return LicenseKey(obj["ProductId"], obj["ID"], obj["Key"], datetime.datetime.fromtimestamp(obj["Created"]),\
                           datetime.datetime.fromtimestamp(obj["Expires"]), obj["Period"], obj["F1"], obj["F2"], \
                           obj["F3"], obj["F4"],obj["F5"],obj["F6"], obj["F7"], \
                           obj["F8"], obj["Notes"], obj["Block"], obj["GlobalId"],\
                           obj["Customer"], LicenseKey.__load_activated_machines(obj["ActivatedMachines"]), obj["TrialActivation"], \
                           obj["MaxNoOfMachines"], obj["AllowedMachines"], obj["DataObjects"], \
-                          datetime.datetime.fromtimestamp(obj["SignDate"]), response)
+                          datetime.datetime.fromtimestamp(obj["SignDate"]),reseller, response)
         
     def save_as_string(self):
         """

@@ -44,7 +44,7 @@ class Key:
                                                   "FloatingTimeInterval": floating_time_interval,\
                                                   "MaxOverdraft": max_overdraft,\
                                                   "FriendlyName" : friendly_name,\
-                                                  "ModelVersion": 2 ,\
+                                                  "ModelVersion": 3 ,\
                                                   "Sign":"True",\
                                                   "SignMethod":1}))
         except HTTPError as e:
@@ -89,6 +89,7 @@ class Key:
                                                   "metadata":metadata,\
                                                   "FloatingTimeInterval": floating_time_interval,\
                                                   "Sign":"True",\
+                                                  "ModelVersion": 3 ,\
                                                   "SignMethod":1}))
         except HTTPError as e:
             response = Response.from_string(e.read())
