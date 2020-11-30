@@ -600,10 +600,10 @@ class Helpers:
             return False
         
         if is_floating_license:
-            if len(license_key.activated_machines) == 1 and \
-            (license_key.activated_machines[0].Mid[9:] == current_mid or \
-             allow_overdraft and license_key.activated_machines[0].Mid[19:] == current_mid):
-                return True
+            for act_machine in license_key.activated_machines:
+                if act_machine.Mid[9:] == current_mid or\
+                   allow_overdraft and act_machine.Mid[19:] == current_mid:
+                    return True
         else:
             for act_machine in license_key.activated_machines:
                 if current_mid == act_machine.Mid:
