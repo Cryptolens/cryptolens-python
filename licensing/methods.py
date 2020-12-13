@@ -396,6 +396,63 @@ class Message:
         return (jobj["messages"], "")
     
     
+    def create_message(token, content="", channel="", time=0):
+        
+        """
+        This method will create a new message.
+        This method requires Edit Messages permission.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/CreateMessage
+        """
+        
+        try:
+            response = HelperMethods.send_request("/message/CreateMessage/", {"token":token, "Channel": channel,"Content":content, "Time": time})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj["messageId"], "")
+    
+    def remove_message(token, messageId):
+        
+        """
+        This method will remove a message that was previously broadcasted.
+        This method requires Edit Messages permission.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/RemoveMessage
+        """
+        
+        try:
+            response = HelperMethods.send_request("/message/RemoveMessage/", {"token":token, "Id": messageId})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (True, "")
+    
+    
 class Product:
     
     @staticmethod
