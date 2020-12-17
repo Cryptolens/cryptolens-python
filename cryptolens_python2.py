@@ -321,7 +321,7 @@ class Key:
         
         jobj = json.loads(response)
 
-        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+        if jobj is None or not("result" in jobj) or jobj["result"] == 1:
             if jobj != None:
                 return (None, jobj["message"])
             else:
@@ -359,7 +359,7 @@ class Key:
         
         jobj = json.loads(response)
 
-        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+        if jobj is None or not("result" in jobj) or jobj["result"] == 1:
             if jobj != None:
                 return (False, jobj["message"])
             else:
@@ -397,12 +397,12 @@ class Helpers:
 
         current_mid = ""
         
-        if custom_machine_code == None:
+        if custom_machine_code is None:
             current_mid = Helpers.GetMachineCode()
         else:
             current_mid = custom_machine_code
         
-        if license_key.activated_machines == None:
+        if license_key.activated_machines is None:
             return False
         
         if is_floating_license:
@@ -533,7 +533,7 @@ class LicenseKey:
     @staticmethod        
     def __load_activated_machines(obj):
         
-        if obj == None:
+        if obj is None:
             return None
         
         arr = []
