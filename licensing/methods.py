@@ -285,14 +285,44 @@ class Key:
         return (True, jobj["message"])
     
     @staticmethod
+    def unblock_key(token, product_id, key):
+        """
+        This method will unblock a specific license key to ensure that it can
+        be accessed by the Key.Activate method.
+        To do the reverse, you can use the BlockKey method.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/UnblockKey
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("/key/UnblockKey", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Key" : key})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (True, jobj["message"])
+    
     def block_key(token, product_id, key):
         """
-        This method will block a specific license key to ensure that the key
-        cannot be accessible by most of the methods in the Web API 
-        (activation, validation, optional field, and deactivation). Note,
-        blocking the key will still allow you to access the key in Web API 3,
-        unless otherwise stated for a given Web API 3 method. 
-        To do the reverse, please see Unblock Key.
+        This method will block a specific license key to ensure that it will
+        no longer be possible to activate it. Note, it will still be possible
+        to access the license key using the GetKey method.
+        To do the reverse, you can use the Unblock Key method.
         
         More docs: https://app.cryptolens.io/docs/api/v3/BlockKey
         """
