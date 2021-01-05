@@ -161,7 +161,12 @@ class Key:
                    add_or_use_existing_customer=False,\
                    trial_activation=False,\
                    max_no_of_machines=0,\
-                   no_of_keys=1):
+                   no_of_keys=1,\
+                   name = None,\
+                   email = None,\
+                   company_name=None,\
+                   enable_customer_association = False,\
+                   allow_activation_management = False ):
         """
         This method allows you to create a new license key. The license can
         either be standalone or associated to a specific customer. It is also
@@ -169,6 +174,12 @@ class Key:
         license using NewCustomer parameter. If you would like to avoid
         duplicates based on the email, you can use the AddOrUseExistingCustomer
         parameter.
+        
+        The parameters "name", "email", "company_name", "enable_customer_association"
+        and "allow_activation_management" are used to create a new customer (or update an existing one)
+        and automatically associate it with the newly created license. Please note that you need to use an
+        access token with both "CreateKey" and "AddCustomer" permissions. Moreover, either
+        the parameter "new_customer" or "add_or_use_existing_customer" need to be set to True.
         
         More docs: https://app.cryptolens.io/docs/api/v3/CreateKey/
         """
@@ -194,7 +205,12 @@ class Key:
                                                   "AddOrUseExistingCustomer": add_or_use_existing_customer,\
                                                   "TrialActivation": trial_activation,\
                                                   "MaxNoOfMachines": max_no_of_machines,\
-                                                  "NoOfKeys":no_of_keys})
+                                                  "NoOfKeys":no_of_keys,\
+                                                  "Name": name,\
+                                                  "Email": email,\
+                                                  "CompanyName": company_name,\
+                                                  "EnableCustomerAssociation": enable_customer_association,\
+                                                  "AllowActivationManagement": allow_activation_management})
         except HTTPError as e:
             response = e.read()
         except URLError as e:
