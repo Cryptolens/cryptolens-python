@@ -63,7 +63,7 @@ result = Key.activate(token=auth,\
                    key="ICVLD-VVSZR-ZTICT-YKGXL",\
                    machine_code=Helpers.GetMachineCode())
 
-if result[0] == None or not Helpers.IsOnRightMachine(result[0]):
+if result[0] is None or not Helpers.IsOnRightMachine(result[0]):
     # an error occurred or the key is invalid or it cannot be activated
     # (eg. the limit of activated devices was achieved)
     print("The license does not work: {0}".format(result[1]))
@@ -102,7 +102,7 @@ When loading it back, we can use the code below:
 with open('licensefile.skm', 'r') as f:
     license_key = LicenseKey.load_from_string(pubKey, f.read())
     
-    if license_key == None or not Helpers.IsOnRightMachine(license_key):
+    if license_key is None or not Helpers.IsOnRightMachine(license_key):
         print("NOTE: This license file does not belong to this machine.")
     else:
         print("Feature 1: " + str(license_key.f1))
@@ -116,7 +116,7 @@ If you want to make sure that the license file is not too old, you can specify t
 with open('licensefile.skm', 'r') as f:
     license_key = LicenseKey.load_from_string(pubKey, f.read(), 30)
     
-    if license_key == None or not Helpers.IsOnRightMachine(license_key):
+    if license_key is None or not Helpers.IsOnRightMachine(license_key):
         print("NOTE: This license file does not belong to this machine.")
     else:
         print("Feature 1: " + str(license_key.f1))
@@ -143,7 +143,7 @@ result = Key.activate(token=auth,\
                    floating_time_interval=300,\
                    max_overdraft=1)
 
-if result[0] == None or not Helpers.IsOnRightMachine(res[0], is_floating_license=True, allow_overdraft=True):
+if result[0] is None or not Helpers.IsOnRightMachine(res[0], is_floating_license=True, allow_overdraft=True):
     print("An error occurred: {0}".format(result[1]))
 else:
     print("Success")
@@ -173,7 +173,7 @@ from licensing.methods import Key, Helpers
 
 trial_key = Key.create_trial_key("WyIzODQ0IiwiempTRWs4SnBKTTArYUh3WkwyZ0VwQkVyeTlUVkRWK2ZTOS8wcTBmaCJd", 3941, Helpers.GetMachineCode())
 
-if trial_key[0] == None:
+if trial_key[0] is None:
     print("An error occurred: {0}".format(trial_key[1]))
 
 
@@ -187,7 +187,7 @@ result = Key.activate(token=auth,\
                    machine_code=Helpers.GetMachineCode())
 
 
-if result[0] == None or not Helpers.IsOnRightMachine(result[0]):
+if result[0] is None or not Helpers.IsOnRightMachine(result[0]):
     print("An error occurred: {0}".format(result[1]))
 else:
     print("Success")

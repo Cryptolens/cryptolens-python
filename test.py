@@ -18,7 +18,7 @@ res = Key.activate(token="WyIyNzMyIiwiYmx6NlJ6ZzdaWjFScmxFVFNCc283YTJyUG5kQURMZ0
                    product_id=3349, key="ICVLD-VVSZR-ZTICT-YKGXL", machine_code=Helpers.GetMachineCode(),\
                    friendly_name=socket.gethostname())
 
-if res[0] == None or not Helpers.IsOnRightMachine(res[0]):
+if res[0] is None or not Helpers.IsOnRightMachine(res[0]):
     print("An error occured: {0}".format(res[1]))
 else:
     print("Success")

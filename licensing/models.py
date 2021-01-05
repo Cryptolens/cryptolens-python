@@ -147,7 +147,7 @@ class LicenseKey:
     @staticmethod
     def __load_activated_machines(obj):
         
-        if obj == None:
+        if obj is None:
             return None
         
         arr = []
