@@ -726,3 +726,64 @@ class Helpers:
         import uuid
         
         return ':'.join(['{:02x}'.format((uuid.getnode() >> ele) & 0xff) for ele in range(0,8*6,8)][::-1])
+    
+    def HasFeature(license_key, feature_name):
+        
+        """
+        Uses a special data object associated with the license key to determine if a certain feature exists (instead of the 8 feature flags).
+        <strong>Formatting: </strong> The name of the data object should be 'cryptolens_features' and it should be structured as a JSON array.
+        
+        For example, <pre>["f1", "f2"]</pre><p>means f1 and f2 are true. You can also have feature bundling, eg. <pre>["f1", ["f2",["voice","image"]]]</pre>
+        which means that f1 and f2 are true, as well as f2.voice and f2.image. You can set any depth, eg. you can have
+        <pre>["f1", ["f2",[["voice",["all"]], "image"]]]</pre> means f2.voice.all is true as well as f2.voice and f2.
+        The dots symbol is used to specify the "sub-features". 
+        
+        Read more here: https://help.cryptolens.io/web-interface/feature-templates
+        
+        Parameters:
+            @license_key The license key object.
+            @feature_name For example, "f2.voice.all".
+        
+        """
+        
+        if license_key.data_objects == None:
+            return False
+        
+        features = None
+        
+        for dobj in license_key.data_objects:
+            
+            if dobj["Name"] == 'cryptolens_features':
+                features = dobj["StringValue"]
+                break
+            
+        array = json.loads(features)
+            
+        feature_path = feature_name.split(".")
+        
+        found = False
+        
+        for i in range(len(feature_path)):
+            
+            found = False
+            index = -1
+            
+            for j in range(len(array)):
+                
+                if not(isinstance(array[j], list)) and array[j] == feature_path[i]:
+                    found = True
+                    break
+                elif isinstance(array[j], list) and array[j][0] == feature_path[i]:
+                    found = True
+                    index = j
+                    
+            if not(found):
+                return False
+            
+            if i+1 < len(feature_path) and index != -1:
+                array = array[index][1]
+            
+        if not(found):
+            return False
+        
+        return True

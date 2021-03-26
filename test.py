@@ -47,3 +47,10 @@ with open('licensefile.skm', 'r') as f:
 print(Helpers.GetMachineCode())
 
 #res = Key.create_trial_key("WyIzODQ0IiwiempTRWs4SnBKTTArYUh3WkwyZ0VwQkVyeTlUVkRWK2ZTOS8wcTBmaCJd", 3941, Helpers.GetMachineCode())
+
+
+# Read more on how to define custom features here: https://help.cryptolens.io/web-interface/feature-templates
+print(Helpers.HasFeature(res[0], "ModuleB"))
+print(Helpers.HasFeature(res[0], "ModuleB.Submodule 2"))
+print(not(Helpers.HasFeature(res[0], "ModuleC.Submodule 2")))
+print(Helpers.HasFeature(res[0], "ModuleD.ModuleD1.Submodule D1"))
