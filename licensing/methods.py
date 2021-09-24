@@ -409,6 +409,88 @@ class AI:
                return (None, "Could not contact the server.")
            
         return (jobj["logs"], "")
+
+    @staticmethod
+    def get_events(token, limit = 10, starting_after = 0, product_id = 0,\
+                        key = "", metadata = ""):
+        
+        """
+        This method will retrieve events that were registered using Register event method.
+        
+        More docs: https://app.cryptolens.io/api/ai/GetEvents
+        """
+        
+        response = ""
+                
+        try:
+            response = HelperMethods.send_request("ai/GetEvents", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Key" : key,\
+                                                  "Limit": limit,\
+                                                  "StartingAfter": starting_after})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+           
+        return (jobj["events"], "")
+    
+    @staticmethod
+    def register_event(token, product_id=0, key="", machine_code="", feature_name ="",\
+                       event_name="", value=0, currency="", metadata=""):
+        """
+        This method will register an event that has occured in either
+        the client app (eg. start of a certain feature or interaction
+        within a feature) or in a third party provider (eg. a payment
+        has occured, etc).
+
+        Note: You can either use this method standalone (eg. by only
+        providing a machine code/device identifier) or together with
+        Cryptolens Licensing module (which requires productId and
+        optionally keyid to be set). The more information that is
+        provided, the better insights can be provided.
+        
+        More docs: https://app.cryptolens.io/api/ai/RegisterEvent
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("/ai/RegisterEvent", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Key" : key,\
+                                                  "MachineCode" : machine_code,\
+                                                  "FeatureName" : feature_name,\
+                                                  "EventName": event_name,\
+                                                  "Value" : value,\
+                                                  "Currency": currency,\
+                                                  "Metadata" : metadata})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (True, jobj["message"])
             
 class Message:
     
