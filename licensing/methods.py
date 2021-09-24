@@ -699,6 +699,78 @@ class Data:
 
         return (jobj, "")
     
+    @staticmethod
+    def add_data_object_to_key(token, product_id, key, name = "", string_value="",\
+                                   int_value=0, check_for_duplicates=False):
+        
+        """
+        This method will add a new Data Object to a license key.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/AddDataObject (see parameters under Method 2)
+        """
+        
+        try:
+            response = HelperMethods.send_request("/data/AddDataObjectToKey/",\
+                                                  {"token":token,\
+                                                   "ProductId" : product_id,\
+                                                   "Key" : key,\
+                                                   "Name" : name,\
+                                                   "IntValue": int_value ,\
+                                                   "StringValue": string_value ,\
+                                                   "CheckForDuplicates" : str(check_for_duplicates)
+                                                   })
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
+    
+    @staticmethod
+    def remove_data_object_to_key(token, product_id, key, object_id=0, name = ""):
+        
+        """
+        This method will add a new Data Object to a license key.
+        
+        Note: either an object_id or name (provided there are no duplicates) is required.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/RemoveDataObject (see parameters under Method 2)
+        """
+        
+        try:
+            response = HelperMethods.send_request("/data/RemoveDataObjectToKey/",\
+                                                  {"token":token,\
+                                                   "ProductId" : product_id,\
+                                                   "Key" : key,\
+                                                   "Name" : name,\
+                                                   "Id": object_id })
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
+    
     
 class PaymentForm:
     
