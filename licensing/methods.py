@@ -808,6 +808,40 @@ class Data:
                return (None, "Could not contact the server.")
 
         return (jobj, "")
+
+    @staticmethod
+    def remove_data_object_to_machine(token, product_id, key, machine_code, object_id=0, name = ""):
+        
+        """
+        This method will remove existing Data Object from Machine Code.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/RemoveDataObject (see parameters under Method 2)
+        """
+        
+        try:
+            response = HelperMethods.send_request("/data/RemoveDataObjectToMachineCode/",\
+                                                  {"token":token,\
+                                                   "ProductId" : product_id,\
+                                                   "Key" : key,\
+                                                   "MachineCode": machine_code,\
+                                                   "Name" : name,\
+                                                   "Id": object_id })
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
     
     
 class PaymentForm:
