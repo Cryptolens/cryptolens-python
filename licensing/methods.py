@@ -877,6 +877,40 @@ class Data:
                return (None, "Could not contact the server.")
 
         return (jobj, "")
+
+    @staticmethod
+    def list_key_data_objects(token, product_id, key, \
+                                  name_contains=""):
+        
+        """
+        This method will list Data Objects for License Key.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/ListDataObjects (see parameters under Method 2)
+        """
+        
+        try:
+            response = HelperMethods.send_request("/data/ListDataObjectsToKey/",\
+                                                  {"token":token,\
+                                                   "ProductId" : product_id,\
+                                                   "Key" : key,\
+                                                   "Contains": name_contains
+                                                   })
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
     
     
 class PaymentForm:
