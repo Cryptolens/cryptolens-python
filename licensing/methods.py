@@ -770,6 +770,44 @@ class Data:
                return (None, "Could not contact the server.")
 
         return (jobj, "")
+
+    @staticmethod
+    def add_data_object_to_machine(token, product_id, key, machine_code, name = "", string_value="",\
+                                   int_value=0, check_for_duplicates=False):
+        
+        """
+        This method will add a new Data Object to Machine.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/AddDataObject (see parameters under Method 2)
+        """
+        
+        try:
+            response = HelperMethods.send_request("/data/AddDataObjectToMachineCode/",\
+                                                  {"token":token,\
+                                                   "ProductId" : product_id,\
+                                                   "Key" : key,\
+                                                   "Name" : name,\
+                                                   "IntValue": int_value ,\
+                                                   "StringValue": string_value ,\
+                                                   "CheckForDuplicates" : str(check_for_duplicates), \
+                                                   "MachineCode": machine_code
+                                                   })
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
     
     
 class PaymentForm:
