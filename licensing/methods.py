@@ -778,7 +778,7 @@ class Data:
         """
         This method will add a new Data Object to Machine.
         
-        More docs: https://app.cryptolens.io/docs/api/v3/AddDataObject (see parameters under Method 2)
+        More docs: https://app.cryptolens.io/docs/api/v3/AddDataObject (see parameters under Method 3)
         """
         
         try:
@@ -815,7 +815,7 @@ class Data:
         """
         This method will remove existing Data Object from Machine Code.
         
-        More docs: https://app.cryptolens.io/docs/api/v3/RemoveDataObject (see parameters under Method 2)
+        More docs: https://app.cryptolens.io/docs/api/v3/RemoveDataObject (see parameters under Method 3)
         """
         
         try:
@@ -850,7 +850,7 @@ class Data:
         """
         This method will list Data Objects for Machine.
         
-        More docs: https://app.cryptolens.io/docs/api/v3/ListDataObjects (see parameters under Method 2)
+        More docs: https://app.cryptolens.io/docs/api/v3/ListDataObjects (see parameters under Method 3)
         """
         
         try:
