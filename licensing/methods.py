@@ -1082,3 +1082,123 @@ class Helpers:
             return False
         
         return True
+
+class Subscription:
+    """
+    Subscription related methods
+    """
+    
+    @staticmethod
+    def record_usage_to_stripe(token, product_id, key, amount=""):
+        
+        """
+        This method records uses Stripe's metered billing to record usage for a certain subscription. In order to use this mehtod, 
+        you need to have set up recurring billing. A record will be created using Stripe's API with action set to 'increment'
+        
+        When creating an access token to this method, remember to include "Subscription" permission and 
+        set the "Lock to key" value to -1.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/RecordUsage (see parameters under Method 3)
+        """
+        
+        try:
+            response = HelperMethods.send_request("/subscription/RecordUsage/",\
+                                                  {"token":token,\
+                                                   "ProductId" : product_id,\
+                                                   "Key" : key,\
+                                                   "Amount" : amount,
+                                                   })
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
+
+class Analytics:
+    """
+    Analytics related methods
+    """
+    
+    @staticmethod
+    def register_single_event(token, product_id="", key="", machine_code="", feature_name="", event_name="", value="", currency="", metadata=""):
+        
+        """
+        This method will register an event that has occured in either the 
+        client app (eg. start of a certain feature or interaction within a feature)
+        or in a third party provider (eg. a payment has occured, etc).
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/RegisterEvent (see parameters under Method 3)
+        """
+        
+        try:
+            response = HelperMethods.send_request("/ai/RegisterEvent/",\
+                                                  {"token":token,\
+                                                   "ProductId" : product_id,\
+                                                   "Key" : key,\
+                                                   "MachineCode" : machine_code,\
+                                                   "FeatureName" : feature_name,\
+                                                   "EventName" : event_name,\
+                                                   "Value" : value,\
+                                                   "Currency": currency,\
+                                                   "Metadata" : metadata
+                                                   })
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
+
+    @staticmethod
+    def get_events(token, product_id="", key="", metadata=""):
+        
+        """
+        This method will retrieve events that were registered using Register event method.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/GetEvents (see parameters under Method 3)
+        """
+        
+        try:
+            response = HelperMethods.send_request("/ai/GetEvents/",\
+                                                  {"token":token,\
+                                                   "ProductId" : product_id,\
+                                                   "Key" : key,\
+                                                   "Metadata" : metadata
+                                                   })
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
