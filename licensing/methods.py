@@ -1082,3 +1082,42 @@ class Helpers:
             return False
         
         return True
+
+class Subscription:
+    """
+    Subscription related methods
+    """
+    
+    @staticmethod
+    def record_usage_to_stripe(token, product_id, key, amount=""):
+        
+        """
+        This method records uses Stripe's metered billing to record usage for a certain subscription. In order to use this method, 
+        you need to have set up recurring billing. A record will be created using Stripe's API with action set to 'increment'      
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/RecordUsage
+        """
+        
+        try:
+            response = HelperMethods.send_request("/subscription/RecordUsage/",\
+                                                  {"token":token,\
+                                                   "ProductId" : product_id,\
+                                                   "Key" : key,\
+                                                   "Amount" : amount,
+                                                   })
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
