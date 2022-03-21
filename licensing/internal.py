@@ -33,7 +33,7 @@ def subprocess_args(include_stdout=True):
 
 class HelperMethods:
     
-    server_address = "https://app.cryptolens.io/api/"
+    server_address = "https://api.cryptolens.io/api/"
     
     verify_SSL = True
     
