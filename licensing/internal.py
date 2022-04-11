@@ -137,7 +137,18 @@ class HelperMethods:
                                       urllib.parse.urlencode(params)\
                                       .encode("utf-8"), context=ctx).read().decode("utf-8")
             
-            
+    @staticmethod
+    def start_process_ps_v2():
+        ps_args = "-Command (Get-CimInstance -Class Win32_ComputerSystemProduct).UUID"
+        
+        cmd = ["powershell", *ps_args.split(" ")]  
+        
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = proc.communicate(timeout=120)
+        
+        rawOutput = out.decode('utf-8').strip()
+        return rawOutput
+        
         
     @staticmethod 
     def start_process(command, v = 1):

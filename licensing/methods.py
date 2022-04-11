@@ -970,7 +970,10 @@ class Helpers:
         """
         
         if "windows" in platform.platform().lower():
-            return HelperMethods.get_SHA256(HelperMethods.start_process(["cmd.exe", "/C", "wmic","csproduct", "get", "uuid"],v))
+            if v==2:    
+                return HelperMethods.get_SHA256(HelperMethods.start_process_ps_v2())
+            else:
+                return HelperMethods.get_SHA256(HelperMethods.start_process(["cmd.exe", "/C", "wmic","csproduct", "get", "uuid"],v))
         elif "mac" in platform.platform().lower() or "darwin" in platform.platform().lower():               
             res = HelperMethods.start_process(["system_profiler","SPHardwareDataType"])
             return HelperMethods.get_SHA256(res[res.index("UUID"):].strip())
