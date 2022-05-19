@@ -196,3 +196,12 @@ else:
     print("Feature 1: " + str(license_key.f1))
     print("License expires: " + str(license_key.expires))
 ```
+
+### License server or custom endpoint
+
+To forward requests to a local license server or a different API, you can set it using the `server_address` in HelperMethods, i.e.,
+
+```
+HelperMethods.server_address = "http://localhost:8080/";
+```
+It is important to include one */* in the end of the address, as shown above.
