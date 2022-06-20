@@ -61,9 +61,9 @@ result = Key.activate(token=auth,\
                    rsa_pub_key=RSAPubKey,\
                    product_id=3349, \
                    key="ICVLD-VVSZR-ZTICT-YKGXL",\
-                   machine_code=Helpers.GetMachineCode())
+                   machine_code=Helpers.GetMachineCode(v=2))
 
-if result[0] == None or not Helpers.IsOnRightMachine(result[0]):
+if result[0] == None or not Helpers.IsOnRightMachine(result[0], v=2):
     # an error occurred or the key is invalid or it cannot be activated
     # (eg. the limit of activated devices was achieved)
     print("The license does not work: {0}".format(result[1]))
@@ -102,7 +102,7 @@ When loading it back, we can use the code below:
 with open('licensefile.skm', 'r') as f:
     license_key = LicenseKey.load_from_string(pubKey, f.read())
     
-    if license_key == None or not Helpers.IsOnRightMachine(license_key):
+    if license_key == None or not Helpers.IsOnRightMachine(license_key, v=2):
         print("NOTE: This license file does not belong to this machine.")
     else:
         print("Feature 1: " + str(license_key.f1))
@@ -139,11 +139,11 @@ result = Key.activate(token=auth,\
                    rsa_pub_key=RSAPubKey,\
                    product_id=3349, \
                    key="ICVLD-VVSZR-ZTICT-YKGXL",\
-                   machine_code=Helpers.GetMachineCode(),\
+                   machine_code=Helpers.GetMachineCode(v=2),\
                    floating_time_interval=300,\
                    max_overdraft=1)
 
-if result[0] == None or not Helpers.IsOnRightMachine(res[0], is_floating_license=True, allow_overdraft=True):
+if result[0] == None or not Helpers.IsOnRightMachine(res[0], is_floating_license=True, allow_overdraft=True, v=2):
     print("An error occurred: {0}".format(result[1]))
 else:
     print("Success")
@@ -184,10 +184,10 @@ result = Key.activate(token=auth,\
                    rsa_pub_key=RSAPubKey,\
                    product_id=3349, \
                    key=trial_key[0],\
-                   machine_code=Helpers.GetMachineCode())
+                   machine_code=Helpers.GetMachineCode(v=2))
 
 
-if result[0] == None or not Helpers.IsOnRightMachine(result[0]):
+if result[0] == None or not Helpers.IsOnRightMachine(result[0], v=2):
     print("An error occurred: {0}".format(result[1]))
 else:
     print("Success")
