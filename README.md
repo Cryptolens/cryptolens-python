@@ -116,7 +116,7 @@ If you want to make sure that the license file is not too old, you can specify t
 with open('licensefile.skm', 'r') as f:
     license_key = LicenseKey.load_from_string(pubKey, f.read(), 30)
     
-    if license_key == None or not Helpers.IsOnRightMachine(license_key):
+    if license_key == None or not Helpers.IsOnRightMachine(license_key, v=2):
         print("NOTE: This license file does not belong to this machine.")
     else:
         print("Feature 1: " + str(license_key.f1))
@@ -171,7 +171,7 @@ The code below shows how to create trial key. If the trial key is successful, `t
 from licensing.models import *
 from licensing.methods import Key, Helpers
 
-trial_key = Key.create_trial_key("WyIzODQ0IiwiempTRWs4SnBKTTArYUh3WkwyZ0VwQkVyeTlUVkRWK2ZTOS8wcTBmaCJd", 3941, Helpers.GetMachineCode())
+trial_key = Key.create_trial_key("WyIzODQ0IiwiempTRWs4SnBKTTArYUh3WkwyZ0VwQkVyeTlUVkRWK2ZTOS8wcTBmaCJd", 3941, Helpers.GetMachineCode(v=2))
 
 if trial_key[0] == None:
     print("An error occurred: {0}".format(trial_key[1]))
