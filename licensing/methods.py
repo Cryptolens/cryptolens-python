@@ -967,20 +967,47 @@ class Helpers:
         """
         Get a unique identifier for this device. If you want the machine code to be the same in .NET on Windows, you
         can set v=2. More information is available here: https://help.cryptolens.io/faq/index#machine-code-generation
+        
+        Note: if we are unable to compute the machine code, None will be returned. Please make sure
+        to check this in production code.
         """
         
         if "windows" in platform.platform().lower():
-            if v==2:    
-                return HelperMethods.get_SHA256(HelperMethods.start_process_ps_v2())
+            
+            seed = ""
+            
+            if v==2:
+                seed = HelperMethods.start_process_ps_v2()
             else:
-                return HelperMethods.get_SHA256(HelperMethods.start_process(["cmd.exe", "/C", "wmic","csproduct", "get", "uuid"],v))
+                seed = HelperMethods.start_process(["cmd.exe", "/C", "wmic","csproduct", "get", "uuid"],v)
+                
+            if seed == "":
+                return None
+            else:
+                return HelperMethods.get_SHA256(seed)
+            
+            
         elif "mac" in platform.platform().lower() or "darwin" in platform.platform().lower():               
             res = HelperMethods.start_process(["system_profiler","SPHardwareDataType"])
-            return HelperMethods.get_SHA256(res[res.index("UUID"):].strip())
+            seed = res[res.index("UUID"):].strip()
+            
+            if seed == "":
+                return None
+            else:
+                return HelperMethods.get_SHA256(seed)
+            
         elif "linux" in platform.platform().lower() :
-            return HelperMethods.get_SHA256(HelperMethods.compute_machine_code())
+            seed = HelperMethods.compute_machine_code()
+            if seed == "":
+                return None
+            else:
+                return HelperMethods.get_SHA256(seed)
         else:
-            return HelperMethods.get_SHA256(HelperMethods.compute_machine_code())
+            seed = HelperMethods.compute_machine_code()
+            if seed == "":
+                return None
+            else:
+                return HelperMethods.get_SHA256(seed)
     
     @staticmethod
     def IsOnRightMachine(license_key, is_floating_license = False, allow_overdraft=False, v = 1, custom_machine_code = None):
