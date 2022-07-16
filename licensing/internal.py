@@ -37,6 +37,8 @@ class HelperMethods:
     
     verify_SSL = True
     
+    proxy_experimental = False
+    
     @staticmethod
     def get_SHA256(string):
         """
@@ -125,9 +127,23 @@ class HelperMethods:
         """
         
         if HelperMethods.verify_SSL:
-            return urllib.request.urlopen(HelperMethods.server_address + method, \
+            req = urllib.request.Request(HelperMethods.server_address + method, \
                                       urllib.parse.urlencode(params)\
-                                      .encode("utf-8")).read().decode("utf-8")
+                                      .encode("utf-8"))
+            
+            if HelperMethods.proxy_experimental == True:
+                proxies = urllib.request.getproxies()
+                if proxies != {}:
+                    
+                    if 'http' in proxies:
+                        req.set_proxy(proxies['http'], 'http')
+                    
+                    if 'https' in proxies:
+                        req.set_proxy(proxies['https'], 'https')
+                    
+            else:
+                return urllib.request.urlopen(req).read().decode("utf-8")    
+            
         else:
             ctx = ssl.create_default_context()
             ctx.check_hostname = False
