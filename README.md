@@ -1,5 +1,9 @@
 # Cryptolens Client API for Python
 
+[![Downloads](https://pepy.tech/badge/licensing)](https://pepy.tech/project/licensing)
+[![Downloads](https://pepy.tech/badge/licensing/month)](https://pepy.tech/project/licensing)
+[![Downloads](https://pepy.tech/badge/licensing/week)](https://pepy.tech/project/licensing)
+
 This library contains helper methods to verify license keys in Python.
 
 Python docs can be found here: https://help.cryptolens.io/api/python/
