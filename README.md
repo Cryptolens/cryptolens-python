@@ -31,7 +31,7 @@ from cryptolens_python2 import *
 
 If you create a plugin for Autodesk Revit or use IronPython 2.7.3 or earlier, please also add the line below right after the import:
 
-```
+```python
 HelperMethods.ironpython2730_legacy = True
 ```
 
@@ -205,7 +205,28 @@ else:
 
 To forward requests to a local license server or a different API, you can set it using the `server_address` in HelperMethods, i.e.,
 
-```
+```python
 HelperMethods.server_address = "http://localhost:8080/";
 ```
 It is important to include one */* in the end of the address, as shown above.
+
+### Other settings
+
+#### Proxy
+
+If you have customers who want to use a proxy server, we recommend enabling the following setting before calling any other API method, such as Key.Activate.
+
+```python
+HelperMethods.proxy_experimental = True
+```
+
+This will ensure that the underlying HTTP library (urllib) used by Cryptolens Python SDK will use the proxy configured on the OS level. The goal is to make this default behaviour in future versions of the library, once enough feedback is collected.
+
+#### SSL verification
+SSL verification can temporarily be disabled by adding the line below before any call to Key.Activate.
+
+```python
+HelperMethods.verify_SSL = False
+```
+
+The Cryptolens Python SDK will verify that the license information has not changed since it left the server using your RSA Public Key. However, we recommend to keep this value unchanged.
