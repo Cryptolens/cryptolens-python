@@ -1082,6 +1082,9 @@ class Helpers:
                 features = dobj["StringValue"]
                 break
             
+        if features == None or features.strip() == "":
+            return False
+    
         array = json.loads(features)
             
         feature_path = feature_name.split(".")
