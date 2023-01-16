@@ -206,9 +206,9 @@ else:
 To forward requests to a local license server or a different API, you can set it using the `server_address` in HelperMethods, i.e.,
 
 ```python
-HelperMethods.server_address = "http://localhost:8080/";
+HelperMethods.server_address = "http://localhost:8080/api/";
 ```
-It is important to include one */* in the end of the address, as shown above.
+It is important to include one */* in the end of the address as well as to attach the "api" suffix.
 
 ### Other settings
 
