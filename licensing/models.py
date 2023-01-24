@@ -167,15 +167,15 @@ class Response:
         
     @staticmethod
     def from_string(responseString):        
-        obj = json.loads(responseString)
+        obj = dict((k.lower(),v) for k,v in json.loads(responseString).items())
         
         licenseKey = ""
         signature = ""
         result = 0
         message = ""
         
-        if "licenseKey" in obj:
-            licenseKey = obj["licenseKey"]
+        if "licensekey" in obj:
+            licenseKey = obj["licensekey"]
             
         if "signature" in obj:
             signature = obj["signature"]

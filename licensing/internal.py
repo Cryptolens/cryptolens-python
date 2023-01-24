@@ -159,7 +159,7 @@ class HelperMethods:
         
         cmd = ["powershell", *ps_args.split(" ")]  
         
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         out, err = proc.communicate(timeout=120)
         
         rawOutput = out.decode('utf-8').strip()
