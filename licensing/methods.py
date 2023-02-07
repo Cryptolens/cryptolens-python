@@ -613,6 +613,45 @@ class Product:
 
         return (jobj["products"], "")
     
+    @staticmethod
+    def get_keys(token, product_id, page = 1, order_by="ID ascending", search_query=""):
+        
+        """
+        This method will return a list of keys for a given product.
+        Please keep in mind that although each license key will be
+        of the License Key type, the fields related to signing operations
+        will be left empty. Instead, if you want to get a signed license key
+        (for example, to achieve offline key activation), please use the
+        Activation method instead.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/GetKeys
+        """
+        
+        try:
+            response = HelperMethods.send_request("/product/getkeys/",\
+                                                  {"token":token,\
+                                                   "ProductId" : product_id,\
+                                                   "Page" : page,\
+                                                   "OrderBy" : order_by,\
+                                                   "SearchQuery" : search_query\
+                                                   })
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj["products"], "")
+    
     
 class Customer:
     
