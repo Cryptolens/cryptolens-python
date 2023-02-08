@@ -650,7 +650,7 @@ class Product:
             else:
                return (None, "Could not contact the server.")
 
-        return (jobj["products"], "")
+        return (jobj["licenseKeys"], "")
     
     
 class Customer:
