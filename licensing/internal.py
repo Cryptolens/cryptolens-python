@@ -91,9 +91,15 @@ class HelperMethods:
         if m is None: return False
         EM = HelperMethods.I2OSP(m, 256)
         if EM is None: return False
-        EM2 = HelperMethods.EMSA_PKCS1_V15_ENCODE(M, 256)  # Can return None, but it's OK since EM is not None
-        return EM == EM2
-    
+        EM2 = HelperMethods.EMSA_PKCS1_V15_ENCODE(M, 256)
+        if EM2 is None: return False
+
+        try:
+            import hmac
+            return hmac.compare_digest(EM, EM2)
+        except (ImportError, AttributeError):
+            return EM == EM2
+
     @staticmethod
     def verify_signature(response, rsaPublicKey):       
         """
