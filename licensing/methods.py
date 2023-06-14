@@ -301,6 +301,41 @@ class Key:
         return (True, jobj["message"])
     
     @staticmethod
+    def change_customer(token, product_id, key, customer_id):
+        """
+        This method will change the customer associated with a license.
+        If the customer is not specified (for example, if CustomerId=0) or
+        the customer with the provided ID does not exist, any customer that
+        was previously associated with the license will be dissociated.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/ChangeCustomer
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("key/ChangeCustomer", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Key" : key,\
+                                                  "CustomerId" : customer_id})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (True, jobj["message"])
+    
+    @staticmethod
     def unblock_key(token, product_id, key):
         """
         This method will unblock a specific license key to ensure that it can

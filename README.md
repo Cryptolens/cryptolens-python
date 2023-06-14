@@ -147,7 +147,7 @@ result = Key.activate(token=auth,\
                    floating_time_interval=300,\
                    max_overdraft=1)
 
-if result[0] == None or not Helpers.IsOnRightMachine(res[0], is_floating_license=True, allow_overdraft=True, v=2):
+if result[0] == None or not Helpers.IsOnRightMachine(result[0], is_floating_license=True, allow_overdraft=True, v=2):
     print("An error occurred: {0}".format(result[1]))
 else:
     print("Success")
