@@ -78,7 +78,7 @@ class LicenseKey:
     @staticmethod
     def from_response(response):
         
-        if response.result == "1":
+        if response.result == 1:
             raise ValueError("The response did not contain any license key object since it was unsuccessful. Message '{0}'.".format(response.message))
         
         obj = json.loads(base64.b64decode(response.license_key).decode('utf-8'))
