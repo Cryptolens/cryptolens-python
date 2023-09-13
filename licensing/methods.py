@@ -64,8 +64,8 @@ class Key:
                     return (LicenseKey.from_response(response), response.message)
                 else:
                     return (None, "The signature check failed.")
-            except Exception:
-                return (None, "The signature check failed.")
+            except Exception as ex:
+                return (None, "An error occured: {0}".format(ex))
             
     @staticmethod
     def get_key(token, rsa_pub_key, product_id, key, fields_to_return = 0,\
