@@ -230,3 +230,12 @@ HelperMethods.verify_SSL = False
 ```
 
 The Cryptolens Python SDK will verify that the license information has not changed since it left the server using your RSA Public Key. However, we recommend to keep this value unchanged.
+
+### Possible errors
+
+#### The expiration date cannot be converted to a datetime object. Please try setting the period to a lower value.
+This error occurs when the timestamp date received from the server exceeds the limit in Python. This typically occurs when the **Period** is set to a very large value, to prevent the license from expiring. 
+
+Although Cryptolens asks for a period (default 30) when you create a new license, this does not mark the license as time-limited. You can read more about it [here](https://help.cryptolens.io/web-interface/keys-that-dont-expire). In short, a license is treated as time-limited by either enforcing this in the Python code (e.g. if F1=true, the license is time-limited and so we check the expiration date against the current date, to see that it is still valid) or on the server side. On the server side, you can, for example, set up a feature that will automatically block expired licenses. You can read more about it [here](https://help.cryptolens.io/faq/index#blocking-expired-licenses).
+
+In sum, to solve this issue, you can either follow one of the methods described above or set the period to a smaller value.
