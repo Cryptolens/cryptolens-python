@@ -87,7 +87,12 @@ class LicenseKey:
         
         if "Reseller" in obj and obj["Reseller"] != None:
             reseller = Reseller(**obj["Reseller"])
-        
+
+        try:
+            datetime.datetime.fromtimestamp(obj["Expires"])
+        except: 
+            raise ValueError("The expiration date cannot be converted to a datetime object. Please try setting the period to a lower value. Read more: https://github.com/Cryptolens/cryptolens-python/tree/master#the-expiration-date-cannot-be-converted-to-a-datetime-object-please-try-setting-the-period-to-a-lower-value")
+
         return LicenseKey(obj["ProductId"], obj["ID"], obj["Key"], datetime.datetime.fromtimestamp(obj["Created"]),\
                           datetime.datetime.fromtimestamp(obj["Expires"]), obj["Period"], obj["F1"], obj["F2"], \
                           obj["F3"], obj["F4"],obj["F5"],obj["F6"], obj["F7"], \
