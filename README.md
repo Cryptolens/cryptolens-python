@@ -242,11 +242,11 @@ In sum, to solve this issue, you can either follow one of the methods described 
 
 #### Could not contact the server. Error message: <urlopen error [SSL: CERTIFICATE_VERIFY _FAILED] certificate verify failed: unable to get local issuer certificate (ssl.c:1125)>
 
-This error is thrown when the urllib library (a built in library in Python that we use to send HTTP requests) is unable to locate the CA files on the client machine. From our experience, this error occurs exclusively on Macs where the Python SDK is incorrectly installed.
+This error is thrown when the urllib library (a built in library in Python that we use to send HTTP requests) is unable to locate the CA files on the client machine. From our experience, this error occurs exclusively on Macs where the Python environment is incorrectly installed.
 
-To solve this temporarily for **testing purposes**, you could temporary disable SSL verifications as described in [here](#ssl-verification), however, we do not recommend this in a production scenario. Instead, a better solution is to fix the root cause why the Python environment cannot find the CA files.
+To solve this temporarily for **testing purposes**, you could temporary disable SSL verifications as described in [here](#ssl-verification), however, we do not recommend this in a production scenario. Instead, a better solution is to fix the underlying issue preventing the Python environment from finding the CA files.
 
-This can be fixed in at least two ways:
+This can be accomplished in at least two ways:
 
 ##### Using certifi
 Before calling any of the API methods (e.g. Key.activate), you can add the following code:
