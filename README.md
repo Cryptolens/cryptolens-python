@@ -239,3 +239,31 @@ This error occurs when the timestamp for the expiration date received from the s
 While Cryptolens requires a period (defaulted to 30) during the creation of a new license, this does not mark the license as time-limited. You can learn more about it [here](https://help.cryptolens.io/web-interface/keys-that-dont-expire). In essence, a license is treated as time-limited by either enforcing this in the Python code (e.g. if F1=true, the license is time-limited and so we check the expiration date against the current date, to see that it is still valid) or on the server side. On the server side, you can, for example, set up a feature that will automatically block expired licenses. You can read more about it [here](https://help.cryptolens.io/faq/index#blocking-expired-licenses).
 
 In sum, to solve this issue, you can either follow one of the methods described above or set the period to a smaller value.
+
+#### Could not contact the server. Error message: <urlopen error [SSL: CERTIFICATE_VERIFY _FAILED] certificate verify failed: unable to get local issuer certificate (ssl.c:1125)>
+
+This error is thrown when the urllib library (a built in library in Python that we use to send HTTP requests) is unable to locate the CA files on the client machine. From our experience, this error occurs exclusively on Macs where the Python SDK is incorrectly installed.
+
+To solve this temporarily for **testing purposes**, you could temporary disable SSL verifications as described in [here](SSL-verification), however, we do not recommend this in a production scenario. Instead, a better solution is to fix the root cause why the Python environment cannot find the CA files.
+
+This can be fixed in at least two ways:
+
+##### Using certifi
+Before calling any of the API methods (e.g. Key.activate), you can add the following code:
+
+```python
+import certifi
+os.environ['SSL_CERT_FILE'] = certifi.where()
+```
+
+Please note that this requires `certifi` package to be installed.
+
+##### Running a script in the Python environment
+An alternative is to run script in their environment that should fix the issue. You can read more about it in this thread: https://github.com/Cryptolens/cryptolens-python/issues/65
+
+##### Summary
+The key takeaway is that it is better to address the issue with missing CA on the user side, since this issue will typically be user-specific. If that is not possible, you can use the code above to manually set the path to CA files. Although we have mentioned turning off SSL verification temporarily, it should not be used in production. `Key.activate` takes care of signature verification internally, but some other methods do not. 
+
+
+
+
