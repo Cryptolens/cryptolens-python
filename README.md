@@ -244,7 +244,7 @@ In sum, to solve this issue, you can either follow one of the methods described 
 
 This error is thrown when the urllib library (a built in library in Python that we use to send HTTP requests) is unable to locate the CA files on the client machine. From our experience, this error occurs exclusively on Macs where the Python SDK is incorrectly installed.
 
-To solve this temporarily for **testing purposes**, you could temporary disable SSL verifications as described in [here](SSL-verification), however, we do not recommend this in a production scenario. Instead, a better solution is to fix the root cause why the Python environment cannot find the CA files.
+To solve this temporarily for **testing purposes**, you could temporary disable SSL verifications as described in [here](#ssl-verification), however, we do not recommend this in a production scenario. Instead, a better solution is to fix the root cause why the Python environment cannot find the CA files.
 
 This can be fixed in at least two ways:
 
