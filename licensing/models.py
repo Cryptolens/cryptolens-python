@@ -164,11 +164,12 @@ class LicenseKey:
 
 class Response:
     
-    def __init__(self, license_key, signature, result, message):
+    def __init__(self, license_key, signature, result, message, metadata=None):
         self.license_key = license_key
         self.signature = signature
         self.result = result
         self.message = message
+        self.metadata = metadata
         
     @staticmethod
     def from_string(responseString):        
@@ -178,6 +179,7 @@ class Response:
         signature = ""
         result = 0
         message = ""
+        metadata = None
         
         if "licensekey" in obj:
             licenseKey = obj["licensekey"]
@@ -190,10 +192,14 @@ class Response:
             
         if "result" in obj:
             result = obj["result"]
+            
+        if "metadata" in obj:
+            metadata = obj["metadata"]
+            
         else:
             result = 1
         
-        return Response(licenseKey, signature, result, message)
+        return Response(licenseKey, signature, result, message, metadata)
         
 class RSAPublicKey:
     

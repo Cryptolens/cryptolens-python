@@ -82,16 +82,32 @@ class HelperMethods:
             return None
         PS = bytes([0xff for _ in range(emLen - tLen - 3)])
         return b"".join([b"\x00\x01", PS, b"\x00", T])
+    
+    @staticmethod
+    def EMSA_PKCS1_V15_ENCODE_SHA512(M, emLen):
+        import hashlib
+        # Use SHA-512 hash function
+        h = hashlib.sha512()
+        h.update(M)
+        H = h.digest()
+    
+        # Adjust the DER encoding for SHA-512
+        T = bytes([0x30, 0x51, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03, 0x05, 0x00, 0x04, 0x40]) + H
+        tLen = len(T)
+        if emLen < tLen + 11:
+            return None
+        PS = bytes([0xff for _ in range(emLen - tLen - 3)])
+        return b"".join([b"\x00\x01", PS, b"\x00", T])
 
     @staticmethod
-    def RSAASSA_PKCS1_V15_VERIFY(pair, M, S):
+    def RSAASSA_PKCS1_V15_VERIFY(pair, M, S, l=256):
         n, e = pair
         s = HelperMethods.OS2IP(S)
         m = HelperMethods.RSAVP1((n,e), s)
         if m is None: return False
         EM = HelperMethods.I2OSP(m, 256)
         if EM is None: return False
-        EM2 = HelperMethods.EMSA_PKCS1_V15_ENCODE(M, 256)
+        EM2 = HelperMethods.EMSA_PKCS1_V15_ENCODE(M, 256) if l==256 else HelperMethods.EMSA_PKCS1_V15_ENCODE_SHA512(M, 256)
         if EM2 is None: return False
 
         try:
@@ -113,6 +129,20 @@ class HelperMethods:
         r = base64.b64decode(response.signature)
         
         return HelperMethods.RSAASSA_PKCS1_V15_VERIFY((n,e), m, r)
+    
+    @staticmethod
+    def verify_signature_metadata(signature, rsaPublicKey):
+        
+        import base64
+        import json
+        
+        data = json.loads(base64.b64decode(signature))
+        
+        d1 = base64.b64decode(data["Data"])
+        s1 = base64.b64decode(data["Signature"])
+        
+        return HelperMethods.RSAASSA_PKCS1_V15_VERIFY((n,e), d,s, l=512)
+        
     
     @staticmethod
     def int2base64(num):

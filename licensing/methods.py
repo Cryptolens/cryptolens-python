@@ -61,7 +61,10 @@ class Key:
         else:
             try:
                 if HelperMethods.verify_signature(response, pubkey):
-                    return (LicenseKey.from_response(response), response.message)
+                    if metadata:
+                        return (LicenseKey.from_response(response), response.message, response.metadata)
+                    else:
+                        return (LicenseKey.from_response(response), response.message)
                 else:
                     return (None, "The signature check failed.")
             except Exception as ex:
