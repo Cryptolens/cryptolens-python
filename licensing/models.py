@@ -192,12 +192,13 @@ class Response:
             
         if "result" in obj:
             result = obj["result"]
+        else:
+            result = 1
             
         if "metadata" in obj:
             metadata = obj["metadata"]
             
-        else:
-            result = 1
+
         
         return Response(licenseKey, signature, result, message, metadata)
         
