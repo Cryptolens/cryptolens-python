@@ -70,13 +70,18 @@ class HelperMethods:
         return pow(s, e, n)
     
     @staticmethod
-    def EMSA_PKCS1_V15_ENCODE(M, emLen):
+    def EMSA_PKCS1_V15_ENCODE(M, emLen, hlen = 256):
         import hashlib
         h = hashlib.sha256()
+        if hlen == 512:
+            h = hashlib.sha512()
         h.update(M)
         H = h.digest()
     
         T = bytes([0x30, 0x31, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01, 0x05, 0x00, 0x04, 0x20]) + H
+        if hlen == 512:
+            T = bytes([0x30, 0x51, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03, 0x05, 0x00, 0x04, 0x40]) + H
+       
         tLen = len(T)
         if emLen < tLen + 11:
             return None
@@ -107,7 +112,7 @@ class HelperMethods:
         if m is None: return False
         EM = HelperMethods.I2OSP(m, 256)
         if EM is None: return False
-        EM2 = HelperMethods.EMSA_PKCS1_V15_ENCODE(M, 256) if l==256 else HelperMethods.EMSA_PKCS1_V15_ENCODE_SHA512(M, 256)
+        EM2 = HelperMethods.EMSA_PKCS1_V15_ENCODE(M, 256, l) 
         if EM2 is None: return False
 
         try:
