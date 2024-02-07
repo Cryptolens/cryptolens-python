@@ -136,12 +136,15 @@ class HelperMethods:
         import base64
         import json
         
+        n = HelperMethods.OS2IP(base64.b64decode(rsaPublicKey.modulus))
+        e = HelperMethods.OS2IP(base64.b64decode(rsaPublicKey.exponent))
+        
         data = json.loads(base64.b64decode(signature))
         
-        d1 = base64.b64decode(data["Data"])
-        s1 = base64.b64decode(data["Signature"])
+        d = base64.b64decode(data["Data"])
+        s = base64.b64decode(data["Signature"])
         
-        return HelperMethods.RSAASSA_PKCS1_V15_VERIFY((n,e), d,s, l=512)
+        return [HelperMethods.RSAASSA_PKCS1_V15_VERIFY((n,e), d,s, l=512), d]
         
     
     @staticmethod

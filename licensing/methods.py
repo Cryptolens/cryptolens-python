@@ -62,7 +62,18 @@ class Key:
             try:
                 if HelperMethods.verify_signature(response, pubkey):
                     if metadata:
-                        return (LicenseKey.from_response(response), response.message, response.metadata)
+                        
+                        try:
+                            metadata_s = HelperMethods.verify_signature_metadata(response.metadata["signature"], pubkey)
+                        
+                            if metadata_s[0]:
+                                return (LicenseKey.from_response(response), response.message, json.loads(metadata_s[1]))
+                            else:
+                                return (LicenseKey.from_response(response), response.message, "Signature check for metadata object failed.")
+                        except:
+                            return (LicenseKey.from_response(response), response.message, "Signature check for metadata object failed.")
+
+                                
                     else:
                         return (LicenseKey.from_response(response), response.message)
                 else:
