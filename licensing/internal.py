@@ -89,22 +89,6 @@ class HelperMethods:
         return b"".join([b"\x00\x01", PS, b"\x00", T])
     
     @staticmethod
-    def EMSA_PKCS1_V15_ENCODE_SHA512(M, emLen):
-        import hashlib
-        # Use SHA-512 hash function
-        h = hashlib.sha512()
-        h.update(M)
-        H = h.digest()
-    
-        # Adjust the DER encoding for SHA-512
-        T = bytes([0x30, 0x51, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03, 0x05, 0x00, 0x04, 0x40]) + H
-        tLen = len(T)
-        if emLen < tLen + 11:
-            return None
-        PS = bytes([0xff for _ in range(emLen - tLen - 3)])
-        return b"".join([b"\x00\x01", PS, b"\x00", T])
-
-    @staticmethod
     def RSAASSA_PKCS1_V15_VERIFY(pair, M, S, l=256):
         n, e = pair
         s = HelperMethods.OS2IP(S)
