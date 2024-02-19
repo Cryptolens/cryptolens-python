@@ -415,7 +415,6 @@ class Key:
            
         return (True, jobj["message"])
     
-    
     def machine_lock_limit(token, product_id, key, number_of_machines):
         """
         This method will change the maximum number of machine codes that
@@ -448,7 +447,6 @@ class Key:
            
         return (True, jobj["message"])
     
-    
     def change_notes(token, product_id, key, notes):
         """
         This method will change the content of the notes field of
@@ -480,7 +478,6 @@ class Key:
                return (False, "Could not contact the server.")
            
         return (True, jobj["message"])
-    
     
     def change_reseller(token, product_id, key, reseller_id):
         """
@@ -515,6 +512,40 @@ class Key:
                return (False, "Could not contact the server.")
            
         return (True, jobj["message"])
+    
+    def create_key_from_template(token, license_template_id):
+        """
+        This method will create a license key based on a License Template.
+        If you want to see all the defined license templates through the API,
+        this can be accomplished with Get License Templates. An alternative is
+        to call the Create Key method, which allows you to specify all the
+        parameters yourself. Note: the "feature lock" field in the access token
+        can be used to restrict which license tempalte id can be used.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/CreateKeyFromTemplate
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("/key/CreateKeyFromTemplate", {"token":token,\
+                                                  "LicenseTemplateId": license_template_id})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (jobj["key"], jobj["rawResponse"], jobj["message"])
 
 class AI:
     
