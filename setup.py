@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
   name = 'licensing',         # How you named your package folder (MyLib)
   packages = ['licensing'],   # Chose the same as "name"
-  version = '0.42',      # Start with a small number and increase it with every change you make
+  version = '0.43',      # Start with a small number and increase it with every change you make
   license='MIT',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
   description = 'Client library for Cryptolens licensing Web API.',   # Give a short description about your library
   author = 'Cryptolens AB',                   # Type in your name

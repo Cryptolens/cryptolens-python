@@ -414,6 +414,138 @@ class Key:
                return (False, "Could not contact the server.")
            
         return (True, jobj["message"])
+    
+    def machine_lock_limit(token, product_id, key, number_of_machines):
+        """
+        This method will change the maximum number of machine codes that
+        a license key can have.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/MachineLockLimit
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("/key/MachineLockLimit", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Key" : key,\
+                                                  "NumberOfMachines": number_of_machines})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (True, jobj["message"])
+    
+    def change_notes(token, product_id, key, notes):
+        """
+        This method will change the content of the notes field of
+        a given license key.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/ChangeNotes
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("/key/ChangeNotes", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Key" : key,\
+                                                  "Notes": notes})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (True, jobj["message"])
+    
+    def change_reseller(token, product_id, key, reseller_id):
+        """
+        This method will change the reseller of a license. If the reseller is
+        not specified (for example, if ResellerId=0) or the reseller with the
+        provided ID does not exist, any reseller that was previously associated
+        with the license will be dissociated.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/ChangeReseller
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("/key/ChangeReseller", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Key" : key,\
+                                                  "ResellerId": reseller_id})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (True, jobj["message"])
+    
+    def create_key_from_template(token, license_template_id):
+        """
+        This method will create a license key based on a License Template.
+        If you want to see all the defined license templates through the API,
+        this can be accomplished with Get License Templates. An alternative is
+        to call the Create Key method, which allows you to specify all the
+        parameters yourself. Note: the "feature lock" field in the access token
+        can be used to restrict which license tempalte id can be used.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/CreateKeyFromTemplate
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("/key/CreateKeyFromTemplate", {"token":token,\
+                                                  "LicenseTemplateId": license_template_id})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (jobj["key"], jobj["rawResponse"], jobj["message"])
 
 class AI:
     
