@@ -414,6 +414,72 @@ class Key:
                return (False, "Could not contact the server.")
            
         return (True, jobj["message"])
+    
+    
+    def machine_lock_limit(token, product_id, key, number_of_machines):
+        """
+        This method will change the maximum number of machine codes that
+        a license key can have.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/MachineLockLimit
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("/key/MachineLockLimit", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Key" : key,\
+                                                  "NumberOfMachines": number_of_machines})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (True, jobj["message"])
+    
+    
+    def change_notes(token, product_id, key, notes):
+        """
+        This method will change the content of the notes field of
+        a given license key.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/ChangeNotes
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("/key/ChangeNotes", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Key" : key,\
+                                                  "Notes": notes})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (True, jobj["message"])
 
 class AI:
     
