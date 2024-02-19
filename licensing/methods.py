@@ -480,6 +480,41 @@ class Key:
                return (False, "Could not contact the server.")
            
         return (True, jobj["message"])
+    
+    
+    def change_reseller(token, product_id, key, reseller_id):
+        """
+        This method will change the reseller of a license. If the reseller is
+        not specified (for example, if ResellerId=0) or the reseller with the
+        provided ID does not exist, any reseller that was previously associated
+        with the license will be dissociated.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/ChangeReseller
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("/key/ChangeReseller", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Key" : key,\
+                                                  "ResellerId": reseller_id})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (True, jobj["message"])
 
 class AI:
     
