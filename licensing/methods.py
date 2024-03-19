@@ -546,6 +546,74 @@ class Key:
                return (False, "Could not contact the server.")
            
         return (jobj["key"], jobj["rawResponse"], jobj["message"])
+    
+    def add_feature(token, product_id, key, feature):
+        """
+        This method will set a certain feature (F1..F8) to true.
+        If the key algorithm in the product is SKGL, the key string will be
+        changed if necessary. Otherwise, if SKM15 is used, the key will stay 
+        the same. To do the reverse, please see RemoveFeature.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/AddFeature
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("/key/AddFeature", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Key" : key,\
+                                                  "Feature" : feature})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (True, jobj["message"])
+    
+    def remove_feature(token, product_id, key, feature):
+        """
+        This method will set a certain feature (F1..F8) to false. If the key
+        algorithm in the product is SKGL, the key string will be changed if
+        necessary. Otherwise, if SKM15 is used, the key will stay the same.
+        To do the reverse, please see AddFeature.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/RemoveFeature
+        """
+        
+        response = ""
+        
+        try:
+            response = HelperMethods.send_request("/key/RemoveFeature", {"token":token,\
+                                                  "ProductId":product_id,\
+                                                  "Key" : key,\
+                                                  "Feature" : feature})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (False, jobj["message"])
+            else:
+               return (False, "Could not contact the server.")
+           
+        return (True, jobj["message"])
 
 class AI:
     
