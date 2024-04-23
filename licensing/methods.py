@@ -940,6 +940,73 @@ class Customer:
                return (None, "Could not contact the server.")
 
         return (jobj, "")
+    
+    @staticmethod
+    def get_customer_licenses(token, customer_id, detailed=False, metadata=False):
+        
+        """
+        This method will add new customer.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/GetCustomerLicenses
+        """
+        
+        try:
+            response = HelperMethods.send_request("/customer/GetCustomerLicenses/",\
+                                                  {"token":token,\
+                                                   "customerId" : customer_id,\
+                                                   "detailed" : detailed,\
+                                                   "metadata" : metadata
+                                                   })
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
+    
+    @staticmethod
+    def get_customer_licenses_by_secret(token, secret, detailed=False, metadata=False):
+        
+        """
+        This method will add new customer.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/GetCustomerLicenses
+        """
+        
+        try:
+            response = HelperMethods.send_request("/customer/GetCustomerLicensesBySecret/",\
+                                                  {"token":token,\
+                                                   "secret" : secret,\
+                                                   "detailed" : detailed,\
+                                                   "metadata" : metadata
+                                                   })
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
+            
             
 class Data:
     
