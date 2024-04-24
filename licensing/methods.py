@@ -945,7 +945,7 @@ class Customer:
     def get_customer_licenses(token, customer_id, detailed=False, metadata=False):
         
         """
-        This method will add new customer.
+        This method will return a list of license keys that belong to a certain customer.
         
         More docs: https://app.cryptolens.io/docs/api/v3/GetCustomerLicenses
         """
@@ -978,7 +978,7 @@ class Customer:
     def get_customer_licenses_by_secret(token, secret, detailed=False, metadata=False):
         
         """
-        This method will add new customer.
+        This method will return a list of license keys that belong to a certain customer.
         
         More docs: https://app.cryptolens.io/docs/api/v3/GetCustomerLicenses
         """
