@@ -899,7 +899,7 @@ class Product:
             else:
                return (None, "Could not contact the server.")
 
-        return (jobj["licenseKeys"], "")
+        return (jobj["licenseKeys"], "", {"returned":jobj["returned"], "total":jobj["total"], "pageCount":jobj["pageCount"]})
     
     
 class Customer:
