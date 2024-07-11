@@ -1024,7 +1024,7 @@ class Data:
         When creating an access token to this method, remember to include "IncrementIntValue" permission and 
         set the "Lock to key" value to -1.
 
-        Please note that you can identify a data object either by its Name or the Id (object_id).
+        Note: either an object_id or name (provided there are no duplicates) is required.
         
         More docs: https://app.cryptolens.io/docs/api/v3/IncrementIntValue (see parameters under Method 2)
         """
@@ -1067,7 +1067,7 @@ class Data:
         When creating an access token to this method, remember to include "DecrementIntValue" permission and 
         set the "Lock to key" value to -1.
 
-        Please note that you can identify a data object either by its Name or the Id (object_id).
+        Note: either an object_id or name (provided there are no duplicates) is required.
         
         More docs: https://app.cryptolens.io/docs/api/v3/DecrementIntValue (see parameters under Method 2)
         """
