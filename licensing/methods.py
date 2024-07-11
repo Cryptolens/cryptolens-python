@@ -1058,7 +1058,7 @@ class Data:
         return (jobj, "")
 
     @staticmethod
-    def decrement_int_value_to_key(token, product_id, key, object_id,\
+    def decrement_int_value_to_key(token, product_id, key, object_id=0, name="",\
                                    int_value=0, enable_bound=False, bound=0):
         
         """
@@ -1066,6 +1066,8 @@ class Data:
         
         When creating an access token to this method, remember to include "DecrementIntValue" permission and 
         set the "Lock to key" value to -1.
+
+        Please note that you can identify a data object either by its Name or the Id (object_id).
         
         More docs: https://app.cryptolens.io/docs/api/v3/DecrementIntValue (see parameters under Method 2)
         """
@@ -1076,6 +1078,7 @@ class Data:
                                                    "ProductId" : product_id,\
                                                    "Key" : key,\
                                                    "Id" : object_id,\
+                                                   "Name" : name,\
                                                    "IntValue": int_value ,\
                                                    "EnableBound": str(enable_bound),\
                                                    "Bound" : bound
