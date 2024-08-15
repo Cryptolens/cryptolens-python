@@ -1460,6 +1460,10 @@ class Helpers:
         on the server side, and it is recommended to set it up instead of relying on the client side (unless 
         your application is running in offline mode). For more details, please review
         https://help.cryptolens.io/web-interface/keys-that-dont-expire
+
+        Parameters:
+            @license_key The license key object.
+            @allow_usage_on_expiry_date If set to true, the license will be considered valid on the day it expires.
         """
 
         import datetime
