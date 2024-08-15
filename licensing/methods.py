@@ -1453,6 +1453,27 @@ class Helpers:
         
         return ':'.join(['{:02x}'.format((uuid.getnode() >> ele) & 0xff) for ele in range(0,8*6,8)][::-1])
     
+    def HasNotExpired(license_key, allow_usage_on_expiry_date=True):
+
+        """
+        Checks that the license key has not expired. Cryptolens offers automatic blocking of licenses
+        on the server side, and it is recommended to set it up instead of relying on the client side (unless 
+        your application is running in offline mode). For more details, please review
+        https://help.cryptolens.io/web-interface/keys-that-dont-expire
+        """
+
+        import datetime
+
+        if license_key == None:
+            return False
+        
+        diff = license_key.expires.replace(tzinfo=datetime.timezone.utc) - datetime.datetime.now(datetime.timezone.utc)
+
+        if allow_usage_on_expiry_date and diff >= datetime.timedelta(0) or not(allow_usage_on_expiry_date) and diff > 0:
+            return True
+
+        return False
+
     def HasFeature(license_key, feature_name):
         
         """
