@@ -1361,6 +1361,39 @@ class PaymentForm:
         return (jobj, "")
 
 class Helpers:
+
+
+    def __read_registry_value(key, subkey, value_name):
+
+        import winreg
+
+        """
+        Reads a value from the Windows Registry.
+
+        Parameters:
+        key (int): The registry root key (e.g., winreg.HKEY_LOCAL_MACHINE).
+        subkey (str): The path to the subkey.
+        value_name (str): The name of the value to read.
+
+        Returns:
+        str: The value read from the registry, or an error message if not found.
+        """
+        try:
+            # Open the registry key
+            registry_key = winreg.OpenKey(key, subkey, 0, winreg.KEY_READ)
+            
+            # Query the value
+            value, reg_type = winreg.QueryValueEx(registry_key, value_name)
+            
+            # Close the registry key
+            winreg.CloseKey(registry_key)
+            
+            return value
+        
+        except FileNotFoundError:
+            return None
+        except Exception as e:
+            return None //str(e)
     
     @staticmethod
     def GetMachineCode(v=1):
@@ -1374,15 +1407,21 @@ class Helpers:
         """
         
         if "windows" in platform.platform().lower():
-            
+
+            import winreg
+
             seed = ""
             
             if v==2:
                 seed = HelperMethods.start_process_ps_v2()
             else:
                 seed = HelperMethods.start_process(["cmd.exe", "/C", "wmic","csproduct", "get", "uuid"],v)
-                
+
             if seed == "":
+                machineGUID = Helpers.__read_registry_value(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Microsoft\Cryptography", "MachineGuid")
+                
+                if machineGUID != None and machineGUID != "":
+                    return machineGUID //HelperMethods.get_SHA256(machineGUID)
                 return None
             else:
                 return HelperMethods.get_SHA256(seed)
