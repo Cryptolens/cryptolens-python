@@ -1393,7 +1393,8 @@ class Helpers:
         except FileNotFoundError:
             return None
         except Exception as e:
-            return None //str(e)
+            return None #str(e)
+        
     
     @staticmethod
     def GetMachineCode(v=1):
@@ -1416,12 +1417,12 @@ class Helpers:
                 seed = HelperMethods.start_process_ps_v2()
             else:
                 seed = HelperMethods.start_process(["cmd.exe", "/C", "wmic","csproduct", "get", "uuid"],v)
-
-            if seed == "":
+            
+            if seed == "" or seed == None:
                 machineGUID = Helpers.__read_registry_value(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Microsoft\Cryptography", "MachineGuid")
                 
                 if machineGUID != None and machineGUID != "":
-                    return machineGUID //HelperMethods.get_SHA256(machineGUID)
+                    HelperMethods.get_SHA256(machineGUID)
                 return None
             else:
                 return HelperMethods.get_SHA256(seed)
