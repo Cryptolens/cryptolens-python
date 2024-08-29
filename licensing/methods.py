@@ -1657,8 +1657,6 @@ class User:
             return (None, "Could not contact the server. Error message: " + str(e))
         except Exception:
             return (None, "Could not contact the server.")
-
-        print(response)
         
         jobj = json.loads(response)
 
@@ -1669,3 +1667,147 @@ class User:
                return (None, "Could not contact the server.")
 
         return (jobj["licenseKeys"], "")
+    
+    """
+    The idea behind user authentication is to allow you to authenticate 
+    users using their crendntials (i.e. username and password) to verify their
+    license. You can use their username and password to retrieve their 
+    licenses instead of asking for a license key.
+
+    This is similar to obtaining all licenses assigned to a customer 
+    using customer secret, with the difference that the user can pick both
+    the username and password, as well as restore a forgotten password.
+    
+    For more information, please see 
+        https://help.cryptolens.io/examples/user-verification and
+        https://app.cryptolens.io/docs/api/v3/UserAuth
+    """
+    
+    @staticmethod
+    def register(token, username, password, email = "", customerId = 0):
+        
+        """
+        This method will register a new user. Please note that calling this
+        method requires a UserAuthAdmin token.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/Register
+        """
+        
+        try:
+            response = HelperMethods.send_request("/userauth/Register/",\
+                                                  {"token":token,\
+                                                   "username":username,\
+                                                   "password":password,\
+                                                   "email":email,\
+                                                   "customerid":customerId})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
+    
+    @staticmethod
+    def associate(token, username, customer_id=0):
+        
+        """
+        Associates a user with a customer object. Please note that calling
+        this method requires a UserAuthAdmin token.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/Associate
+        """
+        
+        try:
+            response = HelperMethods.send_request("/userauth/Associate/",\
+                                                  {"token":token,\
+                                                   "username":username,\
+                                                   "customerid":customer_id})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
+    
+    @staticmethod
+    def dissociate(token, username):
+        
+        """
+        Dissociates a user from a customer customer object. Please note that
+        calling this method requires a UserAuthAdmin token.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/Dissociate
+        """
+        
+        try:
+            response = HelperMethods.send_request("/userauth/Dissociate/",\
+                                                  {"token":token,\
+                                                   "username":username})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
+    
+    
+    @staticmethod
+    def remove_user(token, username):
+        
+        """
+        This method removes a user. Please note that calling this method
+        requires a UserAuthAdmin token.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/RemoveUser
+        """
+        
+        try:
+            response = HelperMethods.send_request("/userauth/RemoveUser/",\
+                                                  {"token":token,\
+                                                   "username":username})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
