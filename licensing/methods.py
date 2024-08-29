@@ -1620,3 +1620,52 @@ class Subscription:
                return (None, "Could not contact the server.")
 
         return (jobj, "")
+
+class User:
+    
+    """
+    The idea behind user authentication is to allow you to authenticate 
+    users using their crendntials (i.e. username and password) to verify their
+    license. You can use their username and password to retrieve their 
+    licenses instead of asking for a license key.
+
+    This is similar to obtaining all licenses assigned to a customer 
+    using customer secret, with the difference that the user can pick both
+    the username and password, as well as restore a forgotten password.
+    
+    For more information, please see 
+        https://help.cryptolens.io/examples/user-verification and
+        https://app.cryptolens.io/docs/api/v3/UserAuth
+    """
+    
+    @staticmethod
+    def login(token, username, password):
+        
+        """
+        This method will return all licenses that belong to the user.
+        This method can be called with an access token that has UserAuthNormal 
+        and UserAuthAdmin permission.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/Login
+        """
+        
+        try:
+            response = HelperMethods.send_request("/userauth/login/", {"token":token, "username":username, "password":password})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        print(response)
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj["licenseKeys"], "")
