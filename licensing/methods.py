@@ -1812,6 +1812,47 @@ class User:
         return (jobj["users"], "")
     
     @staticmethod
+    def change_password(token, username, new_password, old_password="", password_reset_token="", admin_mode=False):
+        
+        """
+        This method will change the password of a user. It supports 3 modes of
+        operation. With an access token that has UserAuthNormal permission
+        (i.e. without admin permission), the password can either be changed by
+        providing the old password or a password reset token, which can be
+        generated using Reset Password Token method. Finally, if you call this
+        method with an access token that has UserAuthAdmin permission, it will
+        allow you to set AdminMode to True and only provide the NewPassword.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/ChangePassword
+        """
+        
+        try:
+            response = HelperMethods.send_request("/userauth/ChangePassword/",\
+                                                  {"token":token,\
+                                                   "username":username,\
+                                                   "OldPassword": old_password,\
+                                                   "NewPassword":new_password,\
+                                                   "PasswordResetToken": password_reset_token,\
+                                                   "AdminMode":admin_mode})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj, "")
+    
+    
+    @staticmethod
     def reset_password_token(token, username):
         
         """
