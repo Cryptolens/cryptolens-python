@@ -1780,6 +1780,37 @@ class User:
 
         return (jobj, "")
     
+    @staticmethod
+    def get_users(token, customer_id = 0):
+        
+        """
+        List all registered users. Please note that calling this method
+        requires a UserAuthAdmin token.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/GetUsers
+        """
+        
+        try:
+            response = HelperMethods.send_request("/userauth/GetUsers/",\
+                                                  {"token":token,\
+                                                   "customerid":customer_id})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj["users"], "")
+    
     
     @staticmethod
     def remove_user(token, username):
