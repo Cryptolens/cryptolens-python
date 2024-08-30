@@ -1811,6 +1811,38 @@ class User:
 
         return (jobj["users"], "")
     
+    @staticmethod
+    def reset_password_token(token, username):
+        
+        """
+        This method allows you to retrive the password reset token that you
+        can use when calling Change Password method. Please note that calling
+        this method requires a UserAuthAdmin token.
+        
+        More docs: https://app.cryptolens.io/docs/api/v3/ResetPasswordToken
+        """
+        
+        try:
+            response = HelperMethods.send_request("/userauth/ResetPasswordToken/",\
+                                                  {"token":token,\
+                                                   "username":username})
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+        
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj["passwordResetToken"], "")
+    
     
     @staticmethod
     def remove_user(token, username):
