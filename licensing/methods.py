@@ -1422,7 +1422,7 @@ class Helpers:
                 machineGUID = Helpers.__read_registry_value(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Microsoft\Cryptography", "MachineGuid")
                 
                 if machineGUID != None and machineGUID != "":
-                    HelperMethods.get_SHA256(machineGUID)
+                    return HelperMethods.get_SHA256(machineGUID)
                 return None
             else:
                 return HelperMethods.get_SHA256(seed)
