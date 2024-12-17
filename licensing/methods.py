@@ -126,7 +126,7 @@ class Key:
                 return (None, "The signature check failed.")
      
     @staticmethod
-    def create_trial_key(token, product_id, machine_code):
+    def create_trial_key(token, product_id, machine_code, friendly_name= ""):
         """
         Calls the CreateTrialKey method in Web API 3 and returns a tuple containing
         (LicenseKeyString, Message). If an error occurs, LicenseKeyString will be None. If
@@ -140,7 +140,8 @@ class Key:
         try:
             response = HelperMethods.send_request("key/createtrialkey", {"token":token,\
                                                   "ProductId":product_id,\
-                                                  "MachineCode":machine_code})
+                                                  "MachineCode":machine_code,\
+                                                  "FriendlyName":friendly_name})
         except HTTPError as e:
             response = e.read()
         except URLError as e:
