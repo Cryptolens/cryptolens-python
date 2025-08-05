@@ -161,14 +161,11 @@ class HelperMethods:
             
             if HelperMethods.proxy_experimental == True:
                 proxies = urllib.request.getproxies()
-                if proxies != {}:
-                    
-                    if 'http' in proxies:
-                        req.set_proxy(proxies['http'], 'http')
-                    
-                    if 'https' in proxies:
-                        req.set_proxy(proxies['https'], 'https')
-                    
+                if HelperMethods.proxy_experimental:
+                    from urllib.parse import urlparse
+                    for scheme, proxy_uri in urllib.request.getproxies().items():
+                        req.set_proxy(urlparse(proxy_uri).netloc, scheme)
+                return urllib.request.urlopen(req).read().decode("utf-8") 
             else:
                 return urllib.request.urlopen(req).read().decode("utf-8")    
             
