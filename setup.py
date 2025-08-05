@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
   name = 'licensing',         # How you named your package folder (MyLib)
   packages = ['licensing'],   # Chose the same as "name"
-  version = '0.51',      # Start with a small number and increase it with every change you make
+  version = '0.52',      # Start with a small number and increase it with every change you make
   license='MIT',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
   #description_file = 'Client library for Cryptolens licensing Web API.',   # Give a short description about your library
   long_description = 'Client library for Cryptolens Web API (software licensing).',
@@ -11,7 +11,7 @@ setup(
   author = 'Cryptolens AB',                   # Type in your name
   author_email = 'support@cryptolens.io',      # Type in your E-Mail
   url = 'https://cryptolens.io',   # Provide either the link to your github or to your website
-  download_url = 'https://github.com/Cryptolens/cryptolens-python/archive/v_51.tar.gz',
+  download_url = 'https://github.com/Cryptolens/cryptolens-python/archive/v_52.tar.gz',
   project_urls={                       # optional, shows on PyPI
         "Source": "https://github.com/Cryptolens/cryptolens-python",
         "Tracker": "https://github.com/Cryptolens/cryptolens-python/issues",
