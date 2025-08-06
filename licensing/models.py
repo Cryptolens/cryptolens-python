@@ -139,8 +139,12 @@ class LicenseKey:
                     
                     licenseKey = LicenseKey.from_response(response)
                     
+                    sign_date = licenseKey.sign_date
+                    if sign_date.tzinfo is None:           
+                        sign_date = sign_date.replace(tzinfo=datetime.timezone.utc)
+                                        
                     if signature_expiration_interval > 0 and \
-                    (licenseKey.sign_date + datetime.timedelta(days=1*signature_expiration_interval) < datetime.datetime.now(datetime.timezone.utc)):
+                    (sign_date + datetime.timedelta(days=1*signature_expiration_interval) < datetime.datetime.now(datetime.timezone.utc)):
                         return None
                     
                     return licenseKey
