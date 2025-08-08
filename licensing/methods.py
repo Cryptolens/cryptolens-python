@@ -1465,6 +1465,9 @@ class Helpers:
             current_mid = Helpers.GetMachineCode(v)
         else:
             current_mid = custom_machine_code
+
+        if current_mid is None:
+            return False
         
         if license_key.activated_machines == None:
             return False
