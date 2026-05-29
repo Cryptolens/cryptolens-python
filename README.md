@@ -201,6 +201,35 @@ else:
     print("License expires: " + str(license_key.expires))
 ```
 
+### Usage analytics
+
+The SDK can retrieve the aggregate usage analytics endpoints from the `AI` class. These methods return a tuple of `(items, message)`, where `items` is a list of dictionaries using the API's camelCase JSON field names.
+
+```python
+from licensing.methods import AI
+
+result = AI.get_daily_aggregates(
+    token="ACCESS_TOKEN_WITH_USAGE_ANALYTICS_PERMISSION",
+    product_id=YOUR_PRODUCT_ID,
+    start="2026-05-01",
+    end="2026-05-31"
+)
+
+if result[0] == None:
+    print("An error occurred: {0}".format(result[1]))
+else:
+    for aggregate in result[0]:
+        print(aggregate["date"], aggregate["totalRequestsLogged"])
+```
+
+Available usage analytics methods:
+
+* `AI.get_daily_aggregates`
+* `AI.get_daily_country_aggregates`
+* `AI.get_key_usage_summaries`
+* `AI.get_key_devices`
+* `AI.get_license_activity_buckets`
+
 ### License server or custom endpoint
 
 To forward requests to a local license server or a different API, you can set it using the `server_address` in HelperMethods, i.e.,

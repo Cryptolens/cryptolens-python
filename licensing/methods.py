@@ -617,6 +617,144 @@ class Key:
         return (True, jobj["message"])
 
 class AI:
+
+    @staticmethod
+    def __get_usage_analytics(endpoint, result_field, token, params):
+
+        response = ""
+
+        params["token"] = token
+
+        try:
+            response = HelperMethods.send_request(endpoint, params)
+        except HTTPError as e:
+            response = e.read()
+        except URLError as e:
+            return (None, "Could not contact the server. Error message: " + str(e))
+        except Exception:
+            return (None, "Could not contact the server.")
+
+        jobj = json.loads(response)
+
+        if jobj == None or not("result" in jobj) or jobj["result"] == 1:
+            if jobj != None:
+                return (None, jobj["message"])
+            else:
+               return (None, "Could not contact the server.")
+
+        return (jobj[result_field], "")
+
+    @staticmethod
+    def get_daily_aggregates(token, product_id = 0, limit = 100,\
+                             starting_after = 0, ending_before = 0,\
+                             start = "", end = ""):
+
+        """
+        This method retrieves daily aggregate Web API log metrics for one or
+        more products. The result contains dictionaries with camelCase fields
+        such as id, productId, date, totalRequestsLogged, successful, and failed.
+
+        More docs: https://app.cryptolens.io/docs/api/v3/GetDailyAggregates
+        """
+
+        return AI.__get_usage_analytics("ai/GetDailyAggregates", "aggregates", token, {
+                                                  "ProductId":product_id,\
+                                                  "Limit": limit,\
+                                                  "StartingAfter": starting_after,\
+                                                  "EndingBefore": ending_before,\
+                                                  "Start": start,\
+                                                  "End": end})
+
+    @staticmethod
+    def get_daily_country_aggregates(token, product_id = 0, country_code = "",\
+                                     limit = 100, starting_after = 0,\
+                                     ending_before = 0, start = "", end = ""):
+
+        """
+        This method retrieves daily aggregate Web API log metrics grouped by
+        country. CountryCode should be a two-letter country code such as US or SE.
+
+        More docs: https://app.cryptolens.io/docs/api/v3/GetDailyCountryAggregates
+        """
+
+        return AI.__get_usage_analytics("ai/GetDailyCountryAggregates", "aggregates", token, {
+                                                  "ProductId":product_id,\
+                                                  "CountryCode": country_code,\
+                                                  "Limit": limit,\
+                                                  "StartingAfter": starting_after,\
+                                                  "EndingBefore": ending_before,\
+                                                  "Start": start,\
+                                                  "End": end})
+
+    @staticmethod
+    def get_key_usage_summaries(token, product_id = 0, key_id = 0, key = "",\
+                                limit = 100, starting_after = 0,\
+                                ending_before = 0, start = "", end = ""):
+
+        """
+        This method retrieves lifetime usage summaries for license keys. The
+        access token must have Usage Analytics permission. If key is supplied,
+        product_id is required by the Web API.
+
+        More docs: https://app.cryptolens.io/docs/api/v3/GetKeyUsageSummaries
+        """
+
+        return AI.__get_usage_analytics("ai/GetKeyUsageSummaries", "summaries", token, {
+                                                  "ProductId":product_id,\
+                                                  "KeyId": key_id,\
+                                                  "Key": key,\
+                                                  "Limit": limit,\
+                                                  "StartingAfter": starting_after,\
+                                                  "EndingBefore": ending_before,\
+                                                  "Start": start,\
+                                                  "End": end})
+
+    @staticmethod
+    def get_key_devices(token, product_id = 0, key_id = 0, key = "",\
+                        machine_code = "", limit = 100, starting_after = 0,\
+                        ending_before = 0, start = "", end = ""):
+
+        """
+        This method retrieves aggregated device usage for license keys. Machine
+        code filtering uses the normalized value stored by the Web API.
+
+        More docs: https://app.cryptolens.io/docs/api/v3/GetKeyDevices
+        """
+
+        return AI.__get_usage_analytics("ai/GetKeyDevices", "devices", token, {
+                                                  "ProductId":product_id,\
+                                                  "KeyId": key_id,\
+                                                  "Key": key,\
+                                                  "MachineCode": machine_code,\
+                                                  "Limit": limit,\
+                                                  "StartingAfter": starting_after,\
+                                                  "EndingBefore": ending_before,\
+                                                  "Start": start,\
+                                                  "End": end})
+
+    @staticmethod
+    def get_license_activity_buckets(token, product_id = 0, key_id = 0,\
+                                     key = "", machine_code = "", limit = 100,\
+                                     starting_after = 0, ending_before = 0,\
+                                     start = "", end = ""):
+
+        """
+        This method retrieves 30-minute license activity buckets for keys and
+        machine codes. Bucket and event timestamps are returned as Unix seconds.
+
+        More docs: https://app.cryptolens.io/docs/api/v3/GetLicenseActivityBuckets
+        """
+
+        return AI.__get_usage_analytics("ai/GetLicenseActivityBuckets", "buckets", token, {
+                                                  "ProductId":product_id,\
+                                                  "KeyId": key_id,\
+                                                  "Key": key,\
+                                                  "MachineCode": machine_code,\
+                                                  "Limit": limit,\
+                                                  "StartingAfter": starting_after,\
+                                                  "EndingBefore": ending_before,\
+                                                  "Start": start,\
+                                                  "End": end})
     
     @staticmethod
     def get_web_api_log(token, product_id = 0, key = "", machine_code="", friendly_name = "",\
